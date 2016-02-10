@@ -2,24 +2,22 @@ package com.translationdata.p010;
 /** Strategy: Brute Force. */
 import static org.junit.Assert.assertEquals;
 
+import java.util.stream.IntStream;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 
 import JUnitTests.FastTest;
-import JUnitTests.SlowTest;
-
 import misc.SieveOfEratosthenes;
 public class P010_SummationOfPrimes {
 	static int testNo = 1;
 
 	public long primesSum(final int upperLimit) {
-		int primeCandidate;
-		int primeCount;
-		long primeSum = 2;
+		SieveOfEratosthenes primeSieve = new SieveOfEratosthenes( upperLimit );
+		final long primeSum = IntStream.range(2, upperLimit).filter(x -> primeSieve.isPrime(x)).sum();
 		
-		
-		System.out.printf("Result(%d) = %d, no. of primes %d%n", upperLimit, primeSum, primeCount);
+		System.out.printf("Result(%d) = %d, %n", upperLimit, primeSum);
 		return primeSum;
 	}
 
@@ -30,10 +28,11 @@ public class P010_SummationOfPrimes {
 	}
 	
 	@Test(timeout = 300_000)
-	@Category(SlowTest.class)
+	@Category(FastTest.class)
 	public void TwoMillionPrimes() {
 		// takes ~133 seconds on an i7 laptop
-		long primeSum = primesSum(2_000_000);
+		long primeSum2 = primesSum(2_000_000);
+		long primeSum = primesSum(10);
 		assertEquals( "Incorrect sum", 142913828922L, primeSum );
 
 	}
