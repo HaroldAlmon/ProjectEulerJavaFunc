@@ -2,6 +2,8 @@ package com.translationdata.p010;
 /** Strategy: Sieve of SieveOfEratosthenes. */
 import static org.junit.Assert.assertEquals;
 
+import java.util.function.LongPredicate;
+import java.util.function.Predicate;
 import java.util.stream.LongStream;
 
 import org.junit.Before;
@@ -15,12 +17,14 @@ public class P010_SummationOfPrimes {
 	
 	public long primesSum(final int upperLimit) {
 		final SieveOfEratosthenes primeSieve = new SieveOfEratosthenes( upperLimit );
+		//Predicate<Long> isPrime =  candidate -> primeSieve.isPrime( Integer.parseInt(candidate.toString()) );
+		
 		final long primeSum = LongStream.range(2, upperLimit)
 			.filter(candidate -> primeSieve.isPrime((int) candidate))
 			.sum();
 		return primeSum;
 	}
-
+	
 	@Before
 	public void before() {
 		System.out.printf("Running unit test...%d%n", testNo);
@@ -32,7 +36,7 @@ public class P010_SummationOfPrimes {
 	public void TwoMillionPrimes() {
 		final int upperLimit = 2_000_000;
 		long primeSum = primesSum(upperLimit);
-		assertEquals( "Incorrect sum", 142913828922L, primeSum );
 		System.out.printf("Result(%d) = %d, %n", upperLimit, primeSum);
+		assertEquals( "Incorrect sum", 142913828922L, primeSum );
 	}
 }
