@@ -2,6 +2,7 @@ package com.translationdata.p010;
 /** Strategy: Brute Force */
 import static org.junit.Assert.assertEquals;
 
+import java.util.function.Function;
 import java.util.stream.IntStream;
 
 import org.junit.Test;
@@ -56,7 +57,7 @@ public class P011_LargestProduct {
 		}
 		
 		private static int getColMaxImpl(int row, final int[][] matrix, int col, int previousProduct) {
-			if (col == matrix[0].length - 4) {
+			if (col > matrix[0].length - 4) {
 				return previousProduct;
 			}
 			final int product =  matrix[row][col] * matrix[row][col+1] * matrix[row][col+2] * matrix[row][col+3];
@@ -67,23 +68,23 @@ public class P011_LargestProduct {
 	
 	static class Cols {
 		public static int columnsMaximum(final int[][] matrix, final int maximumProduct) {
-			return IntStream.range(0, matrix[0].length - 4)
+			return IntStream.range(0, matrix[0].length - 1)
 					.map(col -> getRowMax(col, matrix))
 					.max()
 					.getAsInt();
 		}
 		
-		private static int getRowMax(int row, final int[][] matrix) {
-			return getRowMaxImpl(row, matrix, 0, 0);
+		private static int getRowMax(int col, final int[][] matrix) {
+			return getRowMaxImpl(col, matrix, 0, 0);
 		}
 		
-		private static int getRowMaxImpl(int row, final int[][] matrix, int col, int previousProduct) {
-			if (col == matrix[0].length - 4) {
+		private static int getRowMaxImpl(int col, final int[][] matrix, int row, int previousProduct) {
+			if (row > matrix.length - 4) {
 				return previousProduct;
 			}
 			final int product =  matrix[row][col] * matrix[row+1][col] * matrix[row+2][col] * matrix[row+3][col];
 			final int maxProduct = max(previousProduct, product);
-			return getRowMaxImpl(row, matrix, col + 1, maxProduct);
+			return getRowMaxImpl(col, matrix, row + 1, maxProduct);
 		}		
 	}
 
@@ -93,6 +94,13 @@ public class P011_LargestProduct {
 		System.out.printf("largestProduct() = %d%n", maximumProduct);
 		assertEquals("Incorrect product", 70600674, maximumProduct);
 	}
+	
+	private static int[][] matrix2 = {
+		{8, 2, 22,1},
+		{49, 49, 99, 1},
+		{50, 49, 99, 1},
+		{51, 49, 99, 1}
+};
 	
 	private static int[][] matrix = {
 		{8, 2, 22, 97, 38, 15, 0, 40, 0, 75, 4, 5, 7, 78, 52, 12, 50, 77, 91, 8},
