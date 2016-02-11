@@ -1,4 +1,5 @@
 package com.translationdata.p010;
+
 /** Strategy: Brute Force */
 import static org.junit.Assert.assertEquals;
 import java.util.stream.IntStream;
@@ -6,6 +7,7 @@ import org.junit.Test;
 import org.junit.experimental.categories.Category;
 import static java.lang.Math.max;
 import JUnitTests.FastTest;
+
 @Category(FastTest.class)
 
 public class P011_LargestProduct {
@@ -19,6 +21,8 @@ public class P011_LargestProduct {
 		return maximumProduct;
 	}
 	
+	/* There are 3 functions that iterate over the row number that can be combined into one function.
+	 * The range and product-function-lambda should be passed as parameters. */
 	static class Rows {
 		public static int rowsMaximum(final int[][] matrix) {
 			return IntStream.range(0, matrix.length - 1)
