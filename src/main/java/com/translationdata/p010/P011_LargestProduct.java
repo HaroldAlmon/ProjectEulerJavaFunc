@@ -2,38 +2,25 @@ package com.translationdata.p010;
 /** Strategy: Brute Force */
 import static org.junit.Assert.assertEquals;
 import java.util.stream.IntStream;
-
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
-
 import static java.lang.Math.max;
 import JUnitTests.FastTest;
 @Category(FastTest.class)
+
 public class P011_LargestProduct {
 	public int largestProduct() {
 		int maximumProduct = 0;
 	
-		maximumProduct = Rows.rowsMaximum(matrix, maximumProduct);
-		maximumProduct = Cols.columnsMaximum(matrix, maximumProduct);
-		maximumProduct = FallingDiagonalsMax.rowsMaximum(matrix, maximumProduct);
-		maximumProduct = RisingDiagonalsMax.rowsMaximum(matrix, maximumProduct);
+		maximumProduct = Rows.rowsMaximum(matrix);		
+		maximumProduct = max(maximumProduct, Cols.columnsMaximum(matrix));
+		maximumProduct = max(maximumProduct, FallingDiagonalsMax.rowsMaximum(matrix));
+		maximumProduct = max(maximumProduct, RisingDiagonalsMax.rowsMaximum(matrix));
 		return maximumProduct;
 	}
 	
-	//=====================================================================================================
-	private int risingDiagonalsMaximum(final int[][] matrix, final int maximumProduct) {
-		int product = maximumProduct;
-		for (int row = 0; row < matrix.length - 4; row++) {
-			for (int col = 0; col < matrix[0].length - 4; col++) {
-				product = max(product, matrix[row+3][col] * matrix[row+2][col+1] * matrix[row+1][col+2] * matrix[row][col+3]);
-			}
-		}
-		return product;
-	}
-	//=====================================================================================================
-	
 	static class Rows {
-		public static int rowsMaximum(final int[][] matrix, final int maximumProduct) {
+		public static int rowsMaximum(final int[][] matrix) {
 			return IntStream.range(0, matrix.length - 1)
 				.map(row -> getColMax(row, matrix))
 				.max()
@@ -55,7 +42,7 @@ public class P011_LargestProduct {
 	}
 
 	static class FallingDiagonalsMax {
-		public static int rowsMaximum(final int[][] matrix, final int maximumProduct) {
+		public static int rowsMaximum(final int[][] matrix) {
 			return IntStream.range(0, matrix.length - 4)
 				.map(row -> getColMax(row, matrix))
 				.max()
@@ -77,7 +64,7 @@ public class P011_LargestProduct {
 	}
 	
 	static class RisingDiagonalsMax {
-		public static int rowsMaximum(final int[][] matrix, final int maximumProduct) {
+		public static int rowsMaximum(final int[][] matrix) {
 			return IntStream.range(0, matrix.length - 4)
 				.map(row -> getColMax(row, matrix))
 				.max()
@@ -92,14 +79,14 @@ public class P011_LargestProduct {
 			if (col > matrix[0].length - 4) {
 				return previousProduct;
 			}
-			final int product =  matrix[row][col] * matrix[row+3][col] * matrix[row+2][col+1] * matrix[row+1][col+2] * matrix[row][col+3];
+			final int product =  matrix[row+3][col] * matrix[row+2][col+1] * matrix[row+1][col+2] * matrix[row][col+3];
 			final int maxProduct = max(previousProduct, product);
 			return getColMaxImpl(row, matrix, col + 1, maxProduct);
 		}		
 	}
 	
 	static class Cols {
-		public static int columnsMaximum(final int[][] matrix, final int maximumProduct) {
+		public static int columnsMaximum(final int[][] matrix) {
 			return IntStream.range(0, matrix[0].length - 1)
 					.map(col -> getRowMax(col, matrix))
 					.max()
@@ -119,7 +106,6 @@ public class P011_LargestProduct {
 			return getRowMaxImpl(col, matrix, row + 1, maxProduct);
 		}		
 	}
-	
 
 	@Test
 	public void LargestProduct() {
@@ -127,13 +113,6 @@ public class P011_LargestProduct {
 		System.out.printf("largestProduct() = %d%n", maximumProduct);
 		assertEquals("Incorrect product", 70600674, maximumProduct);
 	}
-	
-	private static int[][] matrix2 = {
-		{8, 2, 22,1},
-		{49, 49, 99, 1},
-		{50, 49, 99, 1},
-		{51, 49, 99, 1}
-};
 	
 	private static int[][] matrix = {
 		{8, 2, 22, 97, 38, 15, 0, 40, 0, 75, 4, 5, 7, 78, 52, 12, 50, 77, 91, 8},
