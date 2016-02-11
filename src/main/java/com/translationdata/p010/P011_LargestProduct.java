@@ -16,7 +16,7 @@ public class P011_LargestProduct {
 		maximumProduct = Rows.rowsMaximum(matrix, maximumProduct);
 		maximumProduct = Cols.columnsMaximum(matrix, maximumProduct);
 		maximumProduct = FallingDiagonalsMax.rowsMaximum(matrix, maximumProduct);
-		maximumProduct = risingDiagonalsMaximum(matrix, maximumProduct);
+		maximumProduct = RisingDiagonalsMax.rowsMaximum(matrix, maximumProduct);
 		return maximumProduct;
 	}
 	
@@ -92,7 +92,7 @@ public class P011_LargestProduct {
 			if (col > matrix[0].length - 4) {
 				return previousProduct;
 			}
-			final int product =  matrix[row][col] * matrix[row+1][col+1] * matrix[row+2][col+2] * matrix[row+3][col+3];
+			final int product =  matrix[row][col] * matrix[row+3][col] * matrix[row+2][col+1] * matrix[row+1][col+2] * matrix[row][col+3];
 			final int maxProduct = max(previousProduct, product);
 			return getColMaxImpl(row, matrix, col + 1, maxProduct);
 		}		
