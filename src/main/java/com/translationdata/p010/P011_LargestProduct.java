@@ -15,51 +15,10 @@ public class P011_LargestProduct {
 		int maximumProduct = 0;
 	
 		maximumProduct = Rows.rowsMaximum(matrix, maximumProduct);
-		maximumProduct = columnsMaximum(matrix, maximumProduct);
+		maximumProduct = Cols.columnsMaximum(matrix, maximumProduct);
 		maximumProduct = fallingDiagonalsMaximum(matrix, maximumProduct);
 		maximumProduct = risingDiagonalsMaximum(matrix, maximumProduct);
 		return maximumProduct;
-	}
-	
-	private int rowsMaximum(final int[][] matrix, final int maximumProduct) {
-		return IntStream.range(0, matrix.length - 1)
-			.map(row -> getColMax(row, matrix))
-			.max()
-			.getAsInt();
-	}
-	
-	private int getColMax(int row, final int[][] matrix) {
-		return getColMaxImpl(row, matrix, 0, 0);
-	}
-	
-	private int getColMaxImpl(int row, final int[][] matrix, int col, int previousProduct) {
-		if (col == matrix[0].length - 4) {
-			return previousProduct;
-		}
-		final int product =  matrix[row][col] * matrix[row][col+1] * matrix[row][col+2] * matrix[row][col+3];
-		final int maxProduct = max(previousProduct, product);
-		return getColMaxImpl(row, matrix, col + 1, maxProduct);
-	}
-	
-	//====================================================================================================
-	private int columnsMaximum(final int[][] matrix, final int maximumProduct) {
-		return IntStream.range(0, matrix[0].length - 4)
-				.map(col -> getRowMax(col, matrix))
-				.max()
-				.getAsInt();
-	}
-	
-	private int getRowMax(int row, final int[][] matrix) {
-		return getRowMaxImpl(row, matrix, 0, 0);
-	}
-	
-	private int getRowMaxImpl(int row, final int[][] matrix, int col, int previousProduct) {
-		if (col == matrix[0].length - 4) {
-			return previousProduct;
-		}
-		final int product =  matrix[row][col] * matrix[row+1][col] * matrix[row+2][col] * matrix[row+3][col];
-		final int maxProduct = max(previousProduct, product);
-		return getRowMaxImpl(row, matrix, col + 1, maxProduct);
 	}
 	
 	//=====================================================================================================
@@ -103,6 +62,28 @@ public class P011_LargestProduct {
 			final int product =  matrix[row][col] * matrix[row][col+1] * matrix[row][col+2] * matrix[row][col+3];
 			final int maxProduct = max(previousProduct, product);
 			return getColMaxImpl(row, matrix, col + 1, maxProduct);
+		}		
+	}
+	
+	static class Cols {
+		public static int columnsMaximum(final int[][] matrix, final int maximumProduct) {
+			return IntStream.range(0, matrix[0].length - 4)
+					.map(col -> getRowMax(col, matrix))
+					.max()
+					.getAsInt();
+		}
+		
+		private static int getRowMax(int row, final int[][] matrix) {
+			return getRowMaxImpl(row, matrix, 0, 0);
+		}
+		
+		private static int getRowMaxImpl(int row, final int[][] matrix, int col, int previousProduct) {
+			if (col == matrix[0].length - 4) {
+				return previousProduct;
+			}
+			final int product =  matrix[row][col] * matrix[row+1][col] * matrix[row+2][col] * matrix[row+3][col];
+			final int maxProduct = max(previousProduct, product);
+			return getRowMaxImpl(row, matrix, col + 1, maxProduct);
 		}		
 	}
 
