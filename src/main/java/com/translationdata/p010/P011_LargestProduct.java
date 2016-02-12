@@ -13,19 +13,26 @@ import static java.lang.Math.max;
 import JUnitTests.FastTest;
 
 @Category(FastTest.class)
-
 public class P011_LargestProduct {
 	BiFunction<Integer, Integer, Integer> columnProduct = (row, col) -> {
 		return matrix[row][col] * matrix[row][col + 1] * matrix[row][col + 2] * matrix[row][col + 3];
 	};
+	
+	BiFunction<Integer, Integer, Integer> FallingDiagonalProduct = (row, col) -> {
+		return matrix[row][col] * matrix[row+1][col+1] * matrix[row+2][col+2] * matrix[row+3][col+3];
+	};
+	
+	BiFunction<Integer, Integer, Integer> RisingDiagonalProduct = (row, col) -> {
+		return matrix[row+3][col] * matrix[row+2][col+1] * matrix[row+1][col+2] * matrix[row][col+3];
+	};	
 	
 	public int largestProduct() {
 		int maximumProduct = 0;
 	
 		maximumProduct = Rows.rowsMaximum(matrix, matrix.length - 1, columnProduct);		
 		maximumProduct = max(maximumProduct, Cols.columnsMaximum(matrix));
-		maximumProduct = max(maximumProduct, FallingDiagonalsMax.rowsMaximum(matrix));
-		maximumProduct = max(maximumProduct, RisingDiagonalsMax.rowsMaximum(matrix));
+		maximumProduct = max(maximumProduct, Rows.rowsMaximum(matrix, matrix.length - 4, FallingDiagonalProduct));
+		maximumProduct = max(maximumProduct, Rows.rowsMaximum(matrix, matrix.length - 4, RisingDiagonalProduct));
 		return maximumProduct;
 	}
 	
@@ -50,50 +57,6 @@ public class P011_LargestProduct {
 			final int product =  calcProduct.apply(row, col);
 			final int maxProduct = max(previousProduct, product);
 			return getColMaxImpl(row, matrix, col + 1, maxProduct, calcProduct);
-		}		
-	}
-
-	static class FallingDiagonalsMax {
-		public static int rowsMaximum(final int[][] matrix) {
-			return IntStream.range(0, matrix.length - 4)
-				.map(row -> getColMax(row, matrix))
-				.max()
-				.getAsInt();
-		}
-		
-		private static int getColMax(int row, final int[][] matrix) {
-			return getColMaxImpl(row, matrix, 0, 0);
-		}
-		
-		private static int getColMaxImpl(int row, final int[][] matrix, int col, int previousProduct) {
-			if (col > matrix[0].length - 4) {
-				return previousProduct;
-			}
-			final int product =  matrix[row][col] * matrix[row+1][col+1] * matrix[row+2][col+2] * matrix[row+3][col+3];
-			final int maxProduct = max(previousProduct, product);
-			return getColMaxImpl(row, matrix, col + 1, maxProduct);
-		}		
-	}
-	
-	static class RisingDiagonalsMax {
-		public static int rowsMaximum(final int[][] matrix) {
-			return IntStream.range(0, matrix.length - 4)
-				.map(row -> getColMax(row, matrix))
-				.max()
-				.getAsInt();
-		}
-		
-		private static int getColMax(int row, final int[][] matrix) {
-			return getColMaxImpl(row, matrix, 0, 0);
-		}
-		
-		private static int getColMaxImpl(int row, final int[][] matrix, int col, int previousProduct) {
-			if (col > matrix[0].length - 4) {
-				return previousProduct;
-			}
-			final int product =  matrix[row+3][col] * matrix[row+2][col+1] * matrix[row+1][col+2] * matrix[row][col+3];
-			final int maxProduct = max(previousProduct, product);
-			return getColMaxImpl(row, matrix, col + 1, maxProduct);
 		}		
 	}
 	
