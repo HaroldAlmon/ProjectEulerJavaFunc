@@ -2,19 +2,27 @@ package com.translationdata.p010;
 
 /** Strategy: Brute Force */
 import static org.junit.Assert.assertEquals;
+
+import java.util.function.BiFunction;
 import java.util.stream.IntStream;
+
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
+
 import static java.lang.Math.max;
 import JUnitTests.FastTest;
 
 @Category(FastTest.class)
 
 public class P011_LargestProduct {
+	BiFunction<Integer, Integer, Integer> columnProduct = (row, col) -> {
+		return matrix[row][col] * matrix[row][col + 1] * matrix[row][col + 2] * matrix[row][col + 3];
+	};
+	
 	public int largestProduct() {
 		int maximumProduct = 0;
 	
-		maximumProduct = Rows.rowsMaximum(matrix);		
+		maximumProduct = Rows.rowsMaximum(matrix, matrix.length - 1, columnProduct);		
 		maximumProduct = max(maximumProduct, Cols.columnsMaximum(matrix));
 		maximumProduct = max(maximumProduct, FallingDiagonalsMax.rowsMaximum(matrix));
 		maximumProduct = max(maximumProduct, RisingDiagonalsMax.rowsMaximum(matrix));
@@ -24,24 +32,24 @@ public class P011_LargestProduct {
 	/* There are 3 functions that iterate over the row number that can be combined into one function.
 	 * The range and product-function-lambda should be passed as parameters. */
 	static class Rows {
-		public static int rowsMaximum(final int[][] matrix) {
-			return IntStream.range(0, matrix.length - 1)
-				.map(row -> getColMax(row, matrix))
+		public static int rowsMaximum(final int[][] matrix, int upperRange, BiFunction<Integer, Integer, Integer> calcProduct) {
+			return IntStream.range(0, upperRange)
+				.map(row -> getColMax(row, matrix, calcProduct))
 				.max()
 				.getAsInt();
 		}
 		
-		private static int getColMax(int row, final int[][] matrix) {
-			return getColMaxImpl(row, matrix, 0, 0);
+		private static int getColMax(int row, final int[][] matrix, BiFunction<Integer, Integer, Integer> calcProduct) {
+			return getColMaxImpl(row, matrix, 0, 0, calcProduct);
 		}
 		
-		private static int getColMaxImpl(int row, final int[][] matrix, int col, int previousProduct) {
+		private static int getColMaxImpl(int row, final int[][] matrix, int col, int previousProduct, BiFunction<Integer, Integer, Integer> calcProduct) {
 			if (col > matrix[0].length - 4) {
 				return previousProduct;
 			}
-			final int product =  matrix[row][col] * matrix[row][col+1] * matrix[row][col+2] * matrix[row][col+3];
+			final int product =  calcProduct.apply(row, col);
 			final int maxProduct = max(previousProduct, product);
-			return getColMaxImpl(row, matrix, col + 1, maxProduct);
+			return getColMaxImpl(row, matrix, col + 1, maxProduct, calcProduct);
 		}		
 	}
 
