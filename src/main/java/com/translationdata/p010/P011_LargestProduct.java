@@ -1,37 +1,50 @@
 package com.translationdata.p010;
 
-/** Strategy: Brute Force */
+/** Strategy: Brute Force, High Order Functions, Tail Recursion */
 import static org.junit.Assert.assertEquals;
-
 import java.util.function.BiFunction;
 import java.util.stream.IntStream;
-
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
-
 import static java.lang.Math.max;
 import JUnitTests.FastTest;
 
 @Category(FastTest.class)
 public class P011_LargestProduct {
-	BiFunction<Integer, Integer, Integer> columnProduct = (row, col) -> {
-		return matrix[row][col] * matrix[row][col + 1] * matrix[row][col + 2] * matrix[row][col + 3];
+	final BiFunction<Integer, Integer, Integer> columnProduct = (row, col) -> {
+		return   matrix[row][col] 
+			   * matrix[row][col + 1] 
+			   * matrix[row][col + 2] 
+			   * matrix[row][col + 3];
 	};
 	
-	BiFunction<Integer, Integer, Integer> fallingDiagonalProduct = (row, col) -> {
-		return matrix[row][col] * matrix[row+1][col+1] * matrix[row+2][col+2] * matrix[row+3][col+3];
+	final BiFunction<Integer, Integer, Integer> fallingDiagonalProduct = (row, col) -> {
+		return   matrix[row]  [col] 
+			   * matrix[row+1][col+1] 
+			   * matrix[row+2][col+2] 
+			   * matrix[row+3][col+3];
 	};
 	
-	BiFunction<Integer, Integer, Integer> risingDiagonalProduct = (row, col) -> {
-		return matrix[row+3][col] * matrix[row+2][col+1] * matrix[row+1][col+2] * matrix[row][col+3];
-	};	
+	final BiFunction<Integer, Integer, Integer> risingDiagonalProduct = (row, col) -> {
+		return   matrix[row+3][col] 
+			   * matrix[row+2][col+1] 
+			   * matrix[row+1][col+2]
+			   * matrix[row]  [col+3];
+	};
+	
+	final BiFunction<Integer, Integer, Integer> rowPoduct = (row, col) -> {
+		return   matrix[row]  [col] 
+			   * matrix[row+1][col] 
+			   * matrix[row+2][col] 
+			   * matrix[row+3][col];
+	};
 	
 	public final int largestProduct() {
 		int maximumProduct = 
 			max(EnumerateRows.columnProduct(matrix, matrix.length - 1, columnProduct),
 			max(EnumerateRows.columnProduct(matrix, matrix.length - 4, fallingDiagonalProduct),
 			max(EnumerateRows.columnProduct(matrix, matrix.length - 4, risingDiagonalProduct),
-				EnumerateColumns.columnsMaximum(matrix) )));
+				EnumerateColumns.columnsMaximum(matrix, rowPoduct) )));
 		return maximumProduct;
 	}
 	
@@ -58,24 +71,24 @@ public class P011_LargestProduct {
 	}
 	
 	static class EnumerateColumns {
-		public static int columnsMaximum(final int[][] matrix) {
+		public static int columnsMaximum(final int[][] matrix, BiFunction<Integer, Integer, Integer> calcProduct) {
 			return IntStream.range(0, matrix[0].length - 1)
-					.map(col -> getRowMax(col, matrix))
+					.map(col -> getRowMax(col, matrix,calcProduct))
 					.max()
 					.getAsInt();
 		}
 		
-		private static int getRowMax(int col, final int[][] matrix) {
-			return getRowMaxImpl(col, matrix, 0, 0);
+		private static int getRowMax(int col, final int[][] matrix, BiFunction<Integer, Integer, Integer> calcProduct) {
+			return getRowMaxImpl(col, matrix, 0, 0, calcProduct);
 		}
 		
-		private static int getRowMaxImpl(int col, final int[][] matrix, int row, int previousProduct) {
+		private static int getRowMaxImpl(int col, final int[][] matrix, int row, int previousProduct, BiFunction<Integer, Integer, Integer> calcProduct) {
 			if (row > matrix.length - 4) {
 				return previousProduct;
 			}
-			final int product =  matrix[row][col] * matrix[row+1][col] * matrix[row+2][col] * matrix[row+3][col];
+			final int product = calcProduct.apply(row, col);
 			final int maxProduct = max(previousProduct, product);
-			return getRowMaxImpl(col, matrix, row + 1, maxProduct);
+			return getRowMaxImpl(col, matrix, row + 1, maxProduct, calcProduct);
 		}		
 	}
 
@@ -107,8 +120,5 @@ public class P011_LargestProduct {
 		{20, 69, 36, 41, 72, 30, 23, 88, 34, 62, 99, 69, 82, 67, 59, 85, 74, 4, 36, 16},
 		{20, 73, 35, 29, 78, 31, 90, 1, 74, 31, 49, 71, 48, 86, 81, 16, 23, 57, 5, 54},
 		{1, 70, 54, 71, 83, 51, 54, 69, 16, 92, 33, 48, 61, 43, 52, 1, 89, 19, 67, 48} 
-};
-	
+	};
 }
-			
-
