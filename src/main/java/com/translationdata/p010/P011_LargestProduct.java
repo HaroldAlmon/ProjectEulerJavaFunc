@@ -26,19 +26,16 @@ public class P011_LargestProduct {
 		return matrix[row+3][col] * matrix[row+2][col+1] * matrix[row+1][col+2] * matrix[row][col+3];
 	};	
 	
-	public int largestProduct() {
-		int maximumProduct = 0;
-	
-		maximumProduct = Rows.columnProduct(matrix, matrix.length - 1, columnProduct);		
-		maximumProduct = max(maximumProduct, Cols.columnsMaximum(matrix));
-		maximumProduct = max(maximumProduct, Rows.columnProduct(matrix, matrix.length - 4, FallingDiagonalProduct));
-		maximumProduct = max(maximumProduct, Rows.columnProduct(matrix, matrix.length - 4, RisingDiagonalProduct));
+	public final int largestProduct() {
+		int maximumProduct = 
+			max(EnumerateRows.columnProduct(matrix, matrix.length - 1, columnProduct),
+			max(EnumerateRows.columnProduct(matrix, matrix.length - 4, FallingDiagonalProduct),
+			max(EnumerateRows.columnProduct(matrix, matrix.length - 4, RisingDiagonalProduct),
+				EnumerateColumns.columnsMaximum(matrix) )));
 		return maximumProduct;
 	}
 	
-	/* There are 3 functions that iterate over the row number that can be combined into one function.
-	 * The range and product-function-lambda should be passed as parameters. */
-	static class Rows {
+	static class EnumerateRows {
 		public static int columnProduct(final int[][] matrix, int upperRange, BiFunction<Integer, Integer, Integer> calcProduct) {
 			return IntStream.range(0, upperRange)
 				.map(row -> getColProd(row, matrix, calcProduct))
@@ -60,7 +57,7 @@ public class P011_LargestProduct {
 		}		
 	}
 	
-	static class Cols {
+	static class EnumerateColumns {
 		public static int columnsMaximum(final int[][] matrix) {
 			return IntStream.range(0, matrix[0].length - 1)
 					.map(col -> getRowMax(col, matrix))
