@@ -18,19 +18,19 @@ public class P011_LargestProduct {
 		return matrix[row][col] * matrix[row][col + 1] * matrix[row][col + 2] * matrix[row][col + 3];
 	};
 	
-	BiFunction<Integer, Integer, Integer> FallingDiagonalProduct = (row, col) -> {
+	BiFunction<Integer, Integer, Integer> fallingDiagonalProduct = (row, col) -> {
 		return matrix[row][col] * matrix[row+1][col+1] * matrix[row+2][col+2] * matrix[row+3][col+3];
 	};
 	
-	BiFunction<Integer, Integer, Integer> RisingDiagonalProduct = (row, col) -> {
+	BiFunction<Integer, Integer, Integer> risingDiagonalProduct = (row, col) -> {
 		return matrix[row+3][col] * matrix[row+2][col+1] * matrix[row+1][col+2] * matrix[row][col+3];
 	};	
 	
 	public final int largestProduct() {
 		int maximumProduct = 
 			max(EnumerateRows.columnProduct(matrix, matrix.length - 1, columnProduct),
-			max(EnumerateRows.columnProduct(matrix, matrix.length - 4, FallingDiagonalProduct),
-			max(EnumerateRows.columnProduct(matrix, matrix.length - 4, RisingDiagonalProduct),
+			max(EnumerateRows.columnProduct(matrix, matrix.length - 4, fallingDiagonalProduct),
+			max(EnumerateRows.columnProduct(matrix, matrix.length - 4, risingDiagonalProduct),
 				EnumerateColumns.columnsMaximum(matrix) )));
 		return maximumProduct;
 	}
