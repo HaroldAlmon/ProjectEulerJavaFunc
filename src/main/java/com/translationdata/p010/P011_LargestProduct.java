@@ -42,9 +42,9 @@ public class P011_LargestProduct {
 	public final int largestProduct() {
 		int maximumProduct = 
 			max(EnumerateRows.columnProduct(matrix, matrix.length - 1, columnProduct),
-			max(EnumerateRows.columnProduct(matrix, matrix.length - 4, fallingDiagonalProduct),
-			max(EnumerateRows.columnProduct(matrix, matrix.length - 4, risingDiagonalProduct),
-				EnumerateColumns.columnsMaximum(matrix, rowPoduct) )));
+			  max(EnumerateRows.columnProduct(matrix, matrix.length - 4, fallingDiagonalProduct),
+			    max(EnumerateRows.columnProduct(matrix, matrix.length - 4, risingDiagonalProduct),
+				  EnumerateColumns.columnsMaximum(matrix, rowPoduct) )));
 		return maximumProduct;
 	}
 	
@@ -60,6 +60,7 @@ public class P011_LargestProduct {
 			return getColProdImpl(row, matrix, 0, 0, calcProduct);
 		}
 		
+		// @tailrec
 		private static int getColProdImpl(int row, final int[][] matrix, int col, int previousProduct, BiFunction<Integer, Integer, Integer> calculateProduct) {
 			if (col > matrix[0].length - 4) {
 				return previousProduct;
@@ -82,6 +83,7 @@ public class P011_LargestProduct {
 			return getRowMaxImpl(col, matrix, 0, 0, calcProduct);
 		}
 		
+		// @tailrec
 		private static int getRowMaxImpl(int col, final int[][] matrix, int row, int previousProduct, BiFunction<Integer, Integer, Integer> calcProduct) {
 			if (row > matrix.length - 4) {
 				return previousProduct;
