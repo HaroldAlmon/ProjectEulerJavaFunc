@@ -51,27 +51,12 @@ public class P011_LargestProduct {
 	static class EnumerateRows {
 		public static int columnProduct(final int[][] matrix, int upperRange, BiFunction<Integer, Integer, Integer> calcProduct) {
 			return IntStream.range(0, upperRange)
-				.map(row -> getColProd2(row, matrix, calcProduct))
+				.map(row -> getColProd(row, matrix, calcProduct))
 				.max()
 				.getAsInt();
 		}
 		
 		private static int getColProd(int row, final int[][] matrix, BiFunction<Integer, Integer, Integer> calcProduct) {
-			return getColProdImpl(row, matrix, 0, 0, calcProduct);
-		}
-		
-		// @tailrec
-		private static int getColProdImpl(int row, final int[][] matrix, int col, int previousProduct, BiFunction<Integer, Integer, Integer> calculateProduct) {
-			if (col > matrix[0].length - 4) {
-				return previousProduct;
-			}
-			final int product =  calculateProduct.apply(row, col);
-			final int maxProduct = max(previousProduct, product);
-			return getColProdImpl(row, matrix, col + 1, maxProduct, calculateProduct);
-		}
-		
-		
-		private static int getColProd2(int row, final int[][] matrix, BiFunction<Integer, Integer, Integer> calcProduct) {
 			return IntStream.range(0, matrix[0].length - 4)
 				.map( col -> calcProduct.apply(row, col) )
 				.max()
