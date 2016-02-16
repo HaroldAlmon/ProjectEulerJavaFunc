@@ -56,7 +56,6 @@ public class P011_LargestProduct {
 				.getAsInt();
 		}
 		
-		// Todo: Try convert converting to a Function that simulates a TriFunction.
 		private static int getColProd(int row, final int[][] matrix, BiFunction<Integer, Integer, Integer> calcProduct) {
 			return IntStream.range(0, matrix[0].length - 4)
 				.map( col -> calcProduct.apply(row, col) )
@@ -68,10 +67,9 @@ public class P011_LargestProduct {
 	static class EnumerateColumns {
 		public static int rowProduct(final int[][] matrix, BiFunction<Integer, Integer, Integer> calcProduct) {
 			return IntStream.range(0, matrix[0].length - 1)
-					//.map(col -> getRowMax(col, matrix,calcProduct))
-					.map(col -> getRowProd(col, matrix,calcProduct))
-					.max()
-					.getAsInt();
+				.map(col -> getRowProd(col, matrix,calcProduct))
+				.max()
+				.getAsInt();
 		}
 		
 		private static int getRowProd(int col, final int[][] matrix, BiFunction<Integer, Integer, Integer> calcProduct) {
@@ -82,7 +80,7 @@ public class P011_LargestProduct {
 		}
 	}
 
-	@Test
+	@Test(timeout = 1_000)
 	public void LargestProduct() {
 		int maximumProduct = largestProduct();
 		System.out.printf("largestProduct() = %d%n", maximumProduct);
