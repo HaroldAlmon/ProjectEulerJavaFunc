@@ -13,44 +13,44 @@ interface MatrixProduct {
 }
 
 @Category(FastTest.class)
-public class P011_LargestProduct {
+public class P011_LargestProduct_SAM {
 	MatrixProduct columnProduct = new MatrixProduct() {
 		@Override
 		public int product(int[][] matrix, int row, int col) {
 			return    matrix[row][col] 
-					* matrix[row][col+1] 
-					* matrix[row][col+2] 
-					* matrix[row][col+3];
+					* matrix[row][col + 1] 
+					* matrix[row][col + 2] 
+					* matrix[row][col + 3];
 		}
 	};
 	
 	MatrixProduct fallingDiagonalProduct = new MatrixProduct() {
 		@Override
 		public int product(int[][] matrix, int row, int col) {
-			return    matrix[row][col] 
-					* matrix[row+1][col+1] 
-					* matrix[row+2][col+2] 
-					* matrix[row+3][col+3];
+			return    matrix[row]    [col] 
+					* matrix[row + 1][col + 1] 
+					* matrix[row + 2][col + 2] 
+					* matrix[row + 3][col + 3];
 		}
 	};
 	
 	MatrixProduct rowProduct = new MatrixProduct() {
 		@Override
 		public int product(int[][] matrix, int row, int col) {
-			return    matrix[row][col] 
-					* matrix[row+1][col] 
-					* matrix[row+2][col] 
-					* matrix[row+3][col];
+			return    matrix[row]    [col] 
+					* matrix[row + 1][col] 
+					* matrix[row + 2][col] 
+					* matrix[row + 3][col];
 		}
 	};
 	
 	MatrixProduct risingDiagonalProduct = new MatrixProduct() {
 		@Override
 		public int product(int[][] matrix, int row, int col) {
-			return    matrix[row+3][col] 
-					* matrix[row+2][col+1] 
-					* matrix[row+1][col+2] 
-					* matrix[row][col+3];
+			return    matrix[row + 3][col] 
+					* matrix[row + 2][col + 1] 
+					* matrix[row + 1][col + 2] 
+					* matrix[row]    [col + 3];
 		}
 	};
 	
