@@ -56,6 +56,7 @@ public class P011_LargestProduct {
 				.getAsInt();
 		}
 		
+		// Todo: Try convert converting to a Function that simulates a TriFunction.
 		private static int getColProd(int row, final int[][] matrix, BiFunction<Integer, Integer, Integer> calcProduct) {
 			return IntStream.range(0, matrix[0].length - 4)
 				.map( col -> calcProduct.apply(row, col) )
@@ -67,24 +68,18 @@ public class P011_LargestProduct {
 	static class EnumerateColumns {
 		public static int rowProduct(final int[][] matrix, BiFunction<Integer, Integer, Integer> calcProduct) {
 			return IntStream.range(0, matrix[0].length - 1)
-					.map(col -> getRowMax(col, matrix,calcProduct))
+					//.map(col -> getRowMax(col, matrix,calcProduct))
+					.map(col -> getRowProd(col, matrix,calcProduct))
 					.max()
 					.getAsInt();
 		}
 		
-		private static int getRowMax(int col, final int[][] matrix, BiFunction<Integer, Integer, Integer> calcProduct) {
-			return getRowMaxImpl(col, matrix, 0, 0, calcProduct);
+		private static int getRowProd(int col, final int[][] matrix, BiFunction<Integer, Integer, Integer> calcProduct) {
+			return IntStream.range(0, matrix.length - 4)
+				.map( row -> calcProduct.apply(row, col) )
+				.max()
+				.getAsInt();
 		}
-		
-		// @tailrec
-		private static int getRowMaxImpl(int col, final int[][] matrix, int row, int previousProduct, BiFunction<Integer, Integer, Integer> calcProduct) {
-			if (row > matrix.length - 4) {
-				return previousProduct;
-			}
-			final int product = calcProduct.apply(row, col);
-			final int maxProduct = max(previousProduct, product);
-			return getRowMaxImpl(col, matrix, row + 1, maxProduct, calcProduct);
-		}		
 	}
 
 	@Test
