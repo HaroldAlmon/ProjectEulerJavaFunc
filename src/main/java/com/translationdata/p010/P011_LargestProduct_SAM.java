@@ -1,5 +1,6 @@
 package com.translationdata.p010;
-/** Strategy: Brute Force, Single Abstract Method Interfaces instead of Lambda expressions */
+
+/** Strategy: Brute Force, Single Abstract Method Interfaces, Tail Recursion */
 import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
@@ -55,13 +56,10 @@ public class P011_LargestProduct_SAM {
 	};
 	
 	public int largestProduct() {
-		final int maximumProduct = 
-			max(columnProduct(matrix, columnProduct, matrix.length), 
-				max(columnProduct(matrix, fallingDiagonalProduct, matrix.length - 4),
-					max(columnProduct(matrix, risingDiagonalProduct, matrix.length - 4),
-						rowProduct(matrix, rowProduct) )));
-		
-		return maximumProduct;
+		return max(columnProduct(matrix, columnProduct, matrix.length), 
+				 max(columnProduct(matrix, fallingDiagonalProduct, matrix.length - 4),
+				   max(columnProduct(matrix, risingDiagonalProduct, matrix.length - 4),
+					 rowProduct(matrix, rowProduct) )));
 	}
 	
 //===============================
