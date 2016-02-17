@@ -59,14 +59,19 @@ public class P011_LargestProduct_SAM {
 		return max(columnProduct(matrix, columnProduct, matrix.length), 
 				 max(columnProduct(matrix, fallingDiagonalProduct, matrix.length - 4),
 				   max(columnProduct(matrix, risingDiagonalProduct, matrix.length - 4),
-					 rowProduct(matrix, rowProduct) )));
+					 enumerateCol(matrix, rowProduct) )));
 	}
 	
 //===============================
-	private int rowProduct(final int[][] matrix, MatrixProduct matrixProduct) {
-		int product = 0;
-		for (int col = 0; col < matrix[0].length; col++)
-			product = max(product, getRowProd(col, matrix, matrixProduct));
+	private int enumerateCol(final int[][] matrix, MatrixProduct matrixProduct) {
+		return enumerateColImpl(0, 0, matrix, matrixProduct);
+	}
+	
+	// @tailrec
+	private int enumerateColImpl(int col, int product, final int[][] matrix, MatrixProduct matrixProduct) {
+		if (col >=  matrix[0].length) 
+			return product;
+		enumerateColImpl( col + 1, max(product, getRowProd(col, matrix, matrixProduct)), matrix, matrixProduct);
 		
 		return product;
 	}
@@ -94,6 +99,22 @@ public class P011_LargestProduct_SAM {
 		
 		return product;
 	}
+	
+	private int enumerateRow(final int[][] matrix, MatrixProduct matrixProduct, int upperLimit) {
+		return enumerateRowImpl(0, 0, matrix, matrixProduct, upperLimit);
+	}
+	
+	// @tailrec
+	private int enumerateRowImpl(int row, int product, final int[][] matrix, MatrixProduct matrixProduct, int upperLimit) {
+		if (row >= upperLimit) 
+			return product;
+		enumerateColImpl( row + 1, max(product, getRowProd(row, matrix, matrixProduct)), matrix, matrixProduct);
+		
+		return product;
+	}
+	
+	
+	
 	
 	private static int getColProd(int row, final int[][] matrix, MatrixProduct matrixProduct) {
 		return getColProdImpl(row, matrix, 0, 0, matrixProduct);
