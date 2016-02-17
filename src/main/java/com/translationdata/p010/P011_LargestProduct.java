@@ -40,12 +40,10 @@ public class P011_LargestProduct {
 	};
 	
 	public final int largestProduct() {
-		int maximumProduct = 
-			max(EnumerateRows.columnProduct(matrix, matrix.length - 1, columnProduct),
-			  max(EnumerateRows.columnProduct(matrix, matrix.length - 4, fallingDiagonalProduct),
-			    max(EnumerateRows.columnProduct(matrix, matrix.length - 4, risingDiagonalProduct),
-				  EnumerateColumns.rowProduct(matrix, rowPoduct) )));
-		return maximumProduct;
+		return max(EnumerateRows.columnProduct(matrix, matrix.length - 1, columnProduct),
+				 max(EnumerateRows.columnProduct(matrix, matrix.length - 4, fallingDiagonalProduct),
+				   max(EnumerateRows.columnProduct(matrix, matrix.length - 4, risingDiagonalProduct),
+					 EnumerateColumns.rowProduct(matrix, rowPoduct) )));
 	}
 	
 	static class EnumerateRows {
