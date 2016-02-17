@@ -56,9 +56,9 @@ public class P011_LargestProduct_SAM {
 	};
 	
 	public int largestProduct() {
-		return max(enumerateRow(matrix, columnProduct, matrix.length - 4), 
-				 max(enumerateRow(matrix, fallingDiagonalProduct, matrix.length - 4),
-				   max(enumerateRow(matrix, risingDiagonalProduct, matrix.length - 4),
+		return max(EnumerateRow.enumerateRow(matrix, columnProduct, matrix.length - 4), 
+				 max(EnumerateRow.enumerateRow(matrix, fallingDiagonalProduct, matrix.length - 4),
+				   max(EnumerateRow.enumerateRow(matrix, risingDiagonalProduct, matrix.length - 4),
 					 enumerateCol(matrix, rowProduct) )));
 	}
 	
@@ -88,15 +88,13 @@ public class P011_LargestProduct_SAM {
 		return getRowProdImpl(col, matrix, row + 1, maxProduct, matrixProduct);
 	}
 	
-	
-	
-//============================================
-	private int enumerateRow(final int[][] matrix, MatrixProduct matrixProduct, int upperLimit) {
+static class EnumerateRow {
+	public static int enumerateRow(final int[][] matrix, MatrixProduct matrixProduct, int upperLimit) {
 		return enumerateRowImpl(0, 0, matrix, matrixProduct, upperLimit);
 	}
 	
 	// @tailrec
-	private int enumerateRowImpl(int row, int product, final int[][] matrix, MatrixProduct matrixProduct, int upperLimit) {
+	private static int enumerateRowImpl(int row, int product, final int[][] matrix, MatrixProduct matrixProduct, int upperLimit) {
 		if (row >= upperLimit) 
 			return product;
 		return enumerateRowImpl( row + 1, max(product, getColProd(row, matrix, matrixProduct)), matrix, matrixProduct, upperLimit);
@@ -115,8 +113,9 @@ public class P011_LargestProduct_SAM {
 		final int maxProduct = max(previousProduct, product);
 		return getColProdImpl(row, matrix, col + 1, maxProduct, matrixProduct);
 	}	
+}
 
-	@Test
+	@Test(timeout = 1_000)
 	public void LargestProduct() {
 		int maximumProduct = largestProduct();
 		System.out.printf("largestProduct() = %d%n", maximumProduct);
