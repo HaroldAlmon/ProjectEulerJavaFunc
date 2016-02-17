@@ -59,23 +59,15 @@ public class P011_LargestProduct_SAM {
 		return max(EnumerateRow.enumerateRow(0, matrix, columnProduct, matrix.length - 4), 
 				 max(EnumerateRow.enumerateRow(0, matrix, fallingDiagonalProduct, matrix.length - 4),
 				   max(EnumerateRow.enumerateRow(0, matrix, risingDiagonalProduct, matrix.length - 4),
-						   EnumerateCol.enumerateCol(matrix, rowProduct) )));
+						   EnumerateCol.enumerateColImpl(0, matrix, rowProduct) )));
 	}
 	
 	static class EnumerateCol {
-		public static int enumerateCol(int[][] matrix, MatrixProduct matrixProduct) {
-			return enumerateColImpl(0, 0, matrix, matrixProduct);
-		}
-
-		// @tailrec
-		private static int enumerateColImpl(int col, int product, int[][] matrix, MatrixProduct matrixProduct) {
+		private static int enumerateColImpl(int col, int[][] matrix, MatrixProduct matrixProduct) {
 			if (col >=  matrix[0].length) 
-				return product;
-			return enumerateColImpl( col + 1, max(product, getRowProd(col, matrix, matrixProduct)), matrix, matrixProduct);
-		}
-
-		private static int getRowProd(int col, int[][] matrix, MatrixProduct matrixProduct) {
-			return getRowProdImpl(col, 0, matrix, matrixProduct);
+				return 0;
+			int product = getRowProdImpl(col, 0, matrix, matrixProduct);
+			return max( product, enumerateColImpl(col + 1, matrix, matrixProduct));
 		}
 
 		private static int getRowProdImpl(int col, int row, int[][] matrix, MatrixProduct matrixProduct) {
