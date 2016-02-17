@@ -64,25 +64,52 @@ public class P011_LargestProduct_SAM {
 		return maximumProduct;
 	}
 	
+//===============================
 	private int rowProduct(final int[][] matrix, MatrixProduct matrixProduct) {
 		int product = 0;
-		for (int col = 0; col < matrix[0].length; col++) {
-			for (int row = 0; row < matrix.length - 4; row++) {
-				product = max(product, matrixProduct.product(matrix, row, col));
-			}
-		}
+		for (int col = 0; col < matrix[0].length; col++)
+			product = max(product, getRowProd(col, matrix, matrixProduct));
+		
 		return product;
 	}
 	
+	private static int getRowProd(int col, final int[][] matrix, MatrixProduct matrixProduct) {
+		return getRowProdImpl(col, matrix, 0, 0, matrixProduct);
+	}
+	
+	// @tailrec
+	private static int getRowProdImpl(int col, final int[][] matrix, int row, int previousProduct, MatrixProduct matrixProduct) {
+		if (row > matrix.length - 4)
+			return previousProduct;
+		
+		final int product = matrixProduct.product(matrix, row, col);
+		final int maxProduct = max(previousProduct, product);
+		return getRowProdImpl(col, matrix, row + 1, maxProduct, matrixProduct);
+	}
+	
+//============================================
+	
 	private int columnProduct(final int[][] matrix, MatrixProduct matrixProduct, int upperLimit) {
 		int product = 0;
-		for (int row = 0; row < upperLimit; row++) {
-			for (int col = 0; col < matrix[0].length - 4; col++) {
-				product = max(product, matrixProduct.product(matrix, row, col));
-			}
-		}
+		for (int row = 0; row < upperLimit; row++)
+			product = max(product, getColProd(row, matrix, matrixProduct));
+		
 		return product;
 	}
+	
+	private static int getColProd(int row, final int[][] matrix, MatrixProduct matrixProduct) {
+		return getColProdImpl(row, matrix, 0, 0, matrixProduct);
+	}
+	
+	// @tailrec
+	private static int getColProdImpl(int row, final int[][] matrix, int col, int previousProduct, MatrixProduct matrixProduct) {
+		if (col > matrix[0].length - 4)
+			return previousProduct;
+		
+		final int product =  matrixProduct.product(matrix, row, col);
+		final int maxProduct = max(previousProduct, product);
+		return getColProdImpl(row, matrix, col + 1, maxProduct, matrixProduct);
+	}	
 
 	@Test(timeout = 500)
 	public void LargestProduct() {
