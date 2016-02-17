@@ -1,6 +1,6 @@
 package com.translationdata.p010;
 
-/** Strategy: Brute Force, High Order Functions, Tail Recursion */
+/** Strategy: Brute Force, High Order Functions */
 import static org.junit.Assert.assertEquals;
 import java.util.function.BiFunction;
 import java.util.stream.IntStream;
@@ -63,7 +63,7 @@ public class P011_LargestProduct {
 				.getAsInt();
 		}
 	}
-	
+
 	static class EnumerateColumns {
 		public static int rowProduct(final int[][] matrix, BiFunction<Integer, Integer, Integer> calcProduct) {
 			return IntStream.range(0, matrix[0].length - 1)
@@ -71,7 +71,7 @@ public class P011_LargestProduct {
 				.max()
 				.getAsInt();
 		}
-		
+
 		private static int getRowProd(int col, final int[][] matrix, BiFunction<Integer, Integer, Integer> calcProduct) {
 			return IntStream.range(0, matrix.length - 4)
 				.map( row -> calcProduct.apply(row, col) )
@@ -80,13 +80,6 @@ public class P011_LargestProduct {
 		}
 	}
 
-	@Test(timeout = 1_000)
-	public void LargestProduct() {
-		int maximumProduct = largestProduct();
-		System.out.printf("largestProduct() = %d%n", maximumProduct);
-		assertEquals("Incorrect product", 70600674, maximumProduct);
-	}
-	
 	private static int[][] matrix = {
 		{8, 2, 22, 97, 38, 15, 0, 40, 0, 75, 4, 5, 7, 78, 52, 12, 50, 77, 91, 8},
 		{49, 49, 99, 40, 17, 81, 18, 57, 60, 87, 17, 40, 98, 43, 69, 48, 4, 56, 62, 0},
@@ -109,4 +102,11 @@ public class P011_LargestProduct {
 		{20, 73, 35, 29, 78, 31, 90, 1, 74, 31, 49, 71, 48, 86, 81, 16, 23, 57, 5, 54},
 		{1, 70, 54, 71, 83, 51, 54, 69, 16, 92, 33, 48, 61, 43, 52, 1, 89, 19, 67, 48} 
 	};
+	
+	@Test(timeout = 1_000)
+	public void LargestProduct() {
+		int maximumProduct = largestProduct();
+		System.out.printf("largestProduct() = %d%n", maximumProduct);
+		assertEquals("Incorrect product", 70600674, maximumProduct);
+	}
 }
