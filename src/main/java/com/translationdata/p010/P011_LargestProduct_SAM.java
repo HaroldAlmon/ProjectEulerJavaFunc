@@ -10,14 +10,14 @@ import static java.lang.Math.max;
 import JUnitTests.FastTest;
 
 interface MatrixProduct {
-	public int product(int[][] matrix, int row, int col);
+	public int apply(int[][] matrix, int row, int col);
 }
 
 @Category(FastTest.class)
 public class P011_LargestProduct_SAM {
 	MatrixProduct columnProduct = new MatrixProduct() {
 		@Override
-		public int product(int[][] matrix, int row, int col) {
+		public int apply(int[][] matrix, int row, int col) {
 			return    matrix[row][col] 
 					* matrix[row][col + 1] 
 					* matrix[row][col + 2] 
@@ -27,7 +27,7 @@ public class P011_LargestProduct_SAM {
 	
 	MatrixProduct fallingDiagonalProduct = new MatrixProduct() {
 		@Override
-		public int product(int[][] matrix, int row, int col) {
+		public int apply(int[][] matrix, int row, int col) {
 			return    matrix[row]    [col] 
 					* matrix[row + 1][col + 1] 
 					* matrix[row + 2][col + 2] 
@@ -37,7 +37,7 @@ public class P011_LargestProduct_SAM {
 	
 	MatrixProduct rowProduct = new MatrixProduct() {
 		@Override
-		public int product(int[][] matrix, int row, int col) {
+		public int apply(int[][] matrix, int row, int col) {
 			return    matrix[row]    [col] 
 					* matrix[row + 1][col] 
 					* matrix[row + 2][col] 
@@ -47,7 +47,7 @@ public class P011_LargestProduct_SAM {
 	
 	MatrixProduct risingDiagonalProduct = new MatrixProduct() {
 		@Override
-		public int product(int[][] matrix, int row, int col) {
+		public int apply(int[][] matrix, int row, int col) {
 			return    matrix[row + 3][col] 
 					* matrix[row + 2][col + 1] 
 					* matrix[row + 1][col + 2] 
@@ -83,7 +83,7 @@ public class P011_LargestProduct_SAM {
 		if (row > matrix.length - 4)
 			return previousProduct;
 		
-		final int product = matrixProduct.product(matrix, row, col);
+		final int product = matrixProduct.apply(matrix, row, col);
 		final int maxProduct = max(previousProduct, product);
 		return getRowProdImpl(col, matrix, row + 1, maxProduct, matrixProduct);
 	}
@@ -111,7 +111,7 @@ public class P011_LargestProduct_SAM {
 		if (col > matrix[0].length - 4)
 			return previousProduct;
 		
-		final int product =  matrixProduct.product(matrix, row, col);
+		final int product =  matrixProduct.apply(matrix, row, col);
 		final int maxProduct = max(previousProduct, product);
 		return getColProdImpl(row, matrix, col + 1, maxProduct, matrixProduct);
 	}	
