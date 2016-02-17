@@ -84,8 +84,7 @@ public class P011_LargestProduct_SAM {
 					return previousProduct;
 				
 				final int product = matrixProduct.apply(matrix, row, col);
-				final int maxProduct = max(previousProduct, product);
-				return getRowProdImpl(col, matrix, row + 1, maxProduct, matrixProduct);
+				return getRowProdImpl(col, matrix, row + 1, max(previousProduct, product), matrixProduct);
 			}
 	}
 
@@ -95,13 +94,13 @@ public class P011_LargestProduct_SAM {
 		}
 		
 			// @tailrec
-			private static int enumerateRowImpl(int row, int product, final int[][] matrix, MatrixProduct matrixProduct, int upperLimit) {
+			private static int enumerateRowImpl(int row, int product, int[][] matrix, MatrixProduct matrixProduct, int upperLimit) {
 				if (row >= upperLimit) 
 					return product;
 				return enumerateRowImpl( row + 1, max(product, getColProd(row, matrix, matrixProduct)), matrix, matrixProduct, upperLimit);
 			}
 		
-		private static int getColProd(int row, final int[][] matrix, MatrixProduct matrixProduct) {
+		private static int getColProd(int row, int[][] matrix, MatrixProduct matrixProduct) {
 			return getColProdImpl(row, matrix, 0, 0, matrixProduct);
 		}
 		
@@ -111,8 +110,7 @@ public class P011_LargestProduct_SAM {
 					return previousProduct;
 				
 				final int product =  matrixProduct.apply(matrix, row, col);
-				final int maxProduct = max(previousProduct, product);
-				return getColProdImpl(row, matrix, col + 1, maxProduct, matrixProduct);
+				return getColProdImpl(row, matrix, col + 1, max(previousProduct, product), matrixProduct);
 			}	
 	}
 
