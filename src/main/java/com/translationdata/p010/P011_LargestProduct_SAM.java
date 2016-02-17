@@ -75,16 +75,15 @@ public class P011_LargestProduct_SAM {
 		}
 
 		private static int getRowProd(int col, int[][] matrix, MatrixProduct matrixProduct) {
-			return getRowProdImpl(col, 0, matrix,  0, matrixProduct);
+			return getRowProdImpl(col, 0, matrix, matrixProduct);
 		}
 
-		// @tailrec
-		private static int getRowProdImpl(int col, int row, int[][] matrix, int previousProduct, MatrixProduct matrixProduct) {
+		private static int getRowProdImpl(int col, int row, int[][] matrix, MatrixProduct matrixProduct) {
 			if (row > matrix.length - 4)
-				return previousProduct;
+				return 0;
 			
 			final int product = matrixProduct.apply(matrix, row, col);
-			return getRowProdImpl(col, row + 1, matrix, max(previousProduct, product), matrixProduct);
+			return  max(product, getRowProdImpl(col, row + 1, matrix, matrixProduct));
 		}
 	}
 
