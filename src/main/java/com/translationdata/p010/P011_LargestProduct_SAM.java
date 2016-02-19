@@ -56,9 +56,9 @@ public class P011_LargestProduct_SAM {
 	};
 	
 	public int largestProduct() {
-		return max(ColumnProduct.columnProduct(matrix, columnProduct), 
-				 max(ColumnProduct.columnProduct(matrix, fallingDiagonalProduct),
-				   max(ColumnProduct.columnProduct(matrix, risingDiagonalProduct),
+		return max(ColumnProduct.columnProduct(matrix, columnProduct,matrix.length - 1), 
+				 max(ColumnProduct.columnProduct(matrix, fallingDiagonalProduct, matrix.length - 4),
+				   max(ColumnProduct.columnProduct(matrix, risingDiagonalProduct, matrix.length - 4),
 					 RowProduct.rowProduct(matrix, rowProduct) )));
 	}
 	
@@ -88,8 +88,8 @@ public class P011_LargestProduct_SAM {
 	}
 
 	static class ColumnProduct {
-		public static int columnProduct(int[][] matrix, MatrixProduct matrixProduct) {
-			return columnProductImpl(0, 0, matrix, matrixProduct, matrix.length - 4);
+		public static int columnProduct(int[][] matrix, MatrixProduct matrixProduct, int upperLimit) {
+			return columnProductImpl(0, 0, matrix, matrixProduct, upperLimit);
 		}
 		
 		private static int columnProductImpl(int row, int product, int[][] matrix, MatrixProduct matrixProduct, int upperLimit) {
