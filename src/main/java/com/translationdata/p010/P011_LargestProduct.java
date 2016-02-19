@@ -40,39 +40,23 @@ public class P011_LargestProduct {
 	};
 	
 	public final int largestProduct() {
-		return max(EnumerateRows.columnProduct(matrix, matrix.length - 1, columnProduct),
-				 max(EnumerateRows.columnProduct(matrix, matrix.length - 4, fallingDiagonalProduct),
-				   max(EnumerateRows.columnProduct(matrix, matrix.length - 4, risingDiagonalProduct),
-					 EnumerateColumns.rowProduct(matrix, rowPoduct) )));
+		return max(FourCellProduct.cellProduct(matrix, columnProduct, 0, 4),
+				 max(FourCellProduct.cellProduct(matrix, fallingDiagonalProduct, 3, 3),
+				   max(FourCellProduct.cellProduct(matrix, risingDiagonalProduct, 3, 3),
+					 FourCellProduct.cellProduct(matrix, rowPoduct, 3, 0) )));
 	}
-	
-	static class EnumerateRows {
-		public static int columnProduct(final int[][] matrix, int upperRange, BiFunction<Integer, Integer, Integer> calcProduct) {
-			return IntStream.range(0, upperRange)
-				.map(row -> getColProd(row, matrix, calcProduct))
+
+	static class FourCellProduct {
+		public static int cellProduct(final int[][] matrix, BiFunction<Integer, Integer, Integer> calcProduct, int rowBuffer, int columnBuffer) {
+			return IntStream.range(0, matrix.length - rowBuffer - 1)
+				.map(row -> calculateProduct(row, matrix, calcProduct, columnBuffer))
 				.max()
 				.getAsInt();
 		}
 		
-		private static int getColProd(int row, final int[][] matrix, BiFunction<Integer, Integer, Integer> calcProduct) {
-			return IntStream.range(0, matrix[0].length - 4)
+		private static int calculateProduct(int row, final int[][] matrix, BiFunction<Integer, Integer, Integer> calcProduct, int columnBuffer) {
+			return IntStream.range(0, matrix[0].length - columnBuffer  - 1)
 				.map( col -> calcProduct.apply(row, col) )
-				.max()
-				.getAsInt();
-		}
-	}
-
-	static class EnumerateColumns {
-		public static int rowProduct(final int[][] matrix, BiFunction<Integer, Integer, Integer> calcProduct) {
-			return IntStream.range(0, matrix[0].length - 1)
-				.map(col -> getRowProd(col, matrix,calcProduct))
-				.max()
-				.getAsInt();
-		}
-
-		private static int getRowProd(int col, final int[][] matrix, BiFunction<Integer, Integer, Integer> calcProduct) {
-			return IntStream.range(0, matrix.length - 4)
-				.map( row -> calcProduct.apply(row, col) )
 				.max()
 				.getAsInt();
 		}
