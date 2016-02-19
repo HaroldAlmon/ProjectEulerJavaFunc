@@ -62,6 +62,31 @@ public class P011_LargestProduct_SAM {
 					 RowProduct.rowProduct(matrix, rowProduct) )));
 	}
 	
+	static class FourCellProduct {
+		public static int columnProduct(int[][] matrix, MatrixProduct matrixProduct, int rowBuffer, int columnBuffer) {
+			return columnProductImpl(0, 0, matrix, matrixProduct, rowBuffer, columnBuffer);
+		}
+		
+		private static int columnProductImpl(int row, int product, int[][] matrix, MatrixProduct matrixProduct, int rowBuffer, int columnBuffer) {
+			if (row >= matrix.length - rowBuffer) 
+				return product;
+			return columnProductImpl(row + 1, max(product, getColProd(row, matrix, matrixProduct, columnBuffer)), matrix, matrixProduct, rowBuffer, columnBuffer);
+		}
+		
+		
+		private static int getColProd(int row, int[][] matrix, MatrixProduct matrixProduct, int columnBuffer) {
+			return getColProdImpl(row, 0, matrix,  0, matrixProduct, columnBuffer);
+		}
+		
+		private static int getColProdImpl(int row,  int col, int[][] matrix,int previousProduct, MatrixProduct matrixProduct, int columnBuffer) {
+			if (col > matrix[0].length - columnBuffer)
+				return previousProduct;
+			
+			final int product =  matrixProduct.apply(matrix, row, col);
+			return getColProdImpl(row, col + 1, matrix,  max(previousProduct, product), matrixProduct, columnBuffer);
+		}	
+	}
+	
 	static class RowProduct {
 		public static int rowProduct(int[][] matrix, MatrixProduct matrixProduct) {
 			return rowProductImpl(0, 0, matrix, matrixProduct);
