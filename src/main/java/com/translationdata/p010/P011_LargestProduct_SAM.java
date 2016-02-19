@@ -59,7 +59,7 @@ public class P011_LargestProduct_SAM {
 		return max(FourCellProduct.cellProduct(matrix, columnProduct, 0, 4), 
 				 max(FourCellProduct.cellProduct(matrix, fallingDiagonalProduct, 4, 4),
 				   max(FourCellProduct.cellProduct(matrix, risingDiagonalProduct, 4, 4),
-					 RowProduct.rowProduct(matrix, rowProduct) )));
+				     FourCellProduct.cellProduct(matrix, rowProduct, 4, 0) )));
 	}
 	
 	static class FourCellProduct {
@@ -79,7 +79,7 @@ public class P011_LargestProduct_SAM {
 		}
 		
 		private static int cacluateProductImpl(int row,  int col, int[][] matrix,int previousProduct, MatrixProduct matrixProduct, int columnBuffer) {
-			if (col > matrix[0].length - columnBuffer)
+			if (col >= matrix[0].length - columnBuffer)
 				return previousProduct;
 			
 			final int product =  matrixProduct.apply(matrix, row, col);
