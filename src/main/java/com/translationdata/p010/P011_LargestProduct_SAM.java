@@ -56,7 +56,7 @@ public class P011_LargestProduct_SAM {
 	};
 	
 	public int largestProduct() {
-		return max(ColumnProduct.columnProduct(matrix, columnProduct,matrix.length - 1), 
+		return max(ColumnProduct.columnProduct(matrix, columnProduct, matrix.length), 
 				 max(ColumnProduct.columnProduct(matrix, fallingDiagonalProduct, matrix.length - 4),
 				   max(ColumnProduct.columnProduct(matrix, risingDiagonalProduct, matrix.length - 4),
 					 RowProduct.rowProduct(matrix, rowProduct) )));
