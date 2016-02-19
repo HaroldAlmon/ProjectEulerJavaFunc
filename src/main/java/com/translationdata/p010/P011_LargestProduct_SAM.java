@@ -63,27 +63,27 @@ public class P011_LargestProduct_SAM {
 	}
 	
 	static class FourCellProduct {
-		public static int columnProduct(int[][] matrix, MatrixProduct matrixProduct, int rowBuffer, int columnBuffer) {
-			return columnProductImpl(0, 0, matrix, matrixProduct, rowBuffer, columnBuffer);
+		public static int cellProduct(int[][] matrix, MatrixProduct cellProductLambda, int rowBuffer, int columnBuffer) {
+			return cellProductImpl(0, 0, matrix, cellProductLambda, rowBuffer, columnBuffer);
 		}
 		
-		private static int columnProductImpl(int row, int product, int[][] matrix, MatrixProduct matrixProduct, int rowBuffer, int columnBuffer) {
+		private static int cellProductImpl(int row, int product, int[][] matrix, MatrixProduct matrixProduct, int rowBuffer, int columnBuffer) {
 			if (row >= matrix.length - rowBuffer) 
 				return product;
-			return columnProductImpl(row + 1, max(product, getColProd(row, matrix, matrixProduct, columnBuffer)), matrix, matrixProduct, rowBuffer, columnBuffer);
+			return cellProductImpl(row + 1, max(product, caculateProduct(row, matrix, matrixProduct, columnBuffer)), matrix, matrixProduct, rowBuffer, columnBuffer);
 		}
 		
 		
-		private static int getColProd(int row, int[][] matrix, MatrixProduct matrixProduct, int columnBuffer) {
-			return getColProdImpl(row, 0, matrix,  0, matrixProduct, columnBuffer);
+		private static int caculateProduct(int row, int[][] matrix, MatrixProduct matrixProduct, int columnBuffer) {
+			return cacluateProductImpl(row, 0, matrix,  0, matrixProduct, columnBuffer);
 		}
 		
-		private static int getColProdImpl(int row,  int col, int[][] matrix,int previousProduct, MatrixProduct matrixProduct, int columnBuffer) {
+		private static int cacluateProductImpl(int row,  int col, int[][] matrix,int previousProduct, MatrixProduct matrixProduct, int columnBuffer) {
 			if (col > matrix[0].length - columnBuffer)
 				return previousProduct;
 			
 			final int product =  matrixProduct.apply(matrix, row, col);
-			return getColProdImpl(row, col + 1, matrix,  max(previousProduct, product), matrixProduct, columnBuffer);
+			return cacluateProductImpl(row, col + 1, matrix,  max(previousProduct, product), matrixProduct, columnBuffer);
 		}	
 	}
 	
