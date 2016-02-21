@@ -11,6 +11,8 @@ import JUnitTests.FastTest;
 
 @Category(FastTest.class)
 public class P011_LargestProduct {
+	// TODO: Generalize these calculations by apssing a cell buffer parameter.
+	// This requires a TriFunction that does not exist in Java 8.
 	final BiFunction<Integer, Integer, Integer> columnProduct = (row, col) -> {
 		return   matrix[row][col] 
 			   * matrix[row][col + 1] 
