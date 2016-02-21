@@ -38,15 +38,16 @@ public class P011_LargestProduct {
 			   * matrix[row+2][col] 
 			   * matrix[row+3][col];
 	};
-	
+
 	public final int largestProduct() {
-		return max(cellProduct(matrix, columnProduct, 0, 4),
-				 max(cellProduct(matrix, fallingDiagonalProduct, 4, 4),
-				   max(cellProduct(matrix, risingDiagonalProduct, 4, 4),
-					 EnumerateColumns.rowProduct(matrix, rowPoduct) )));
+		final int cellBuffer = 3;
+		return max(matrixCellProduct(matrix, columnProduct, 0, cellBuffer),
+				 max(matrixCellProduct(matrix, fallingDiagonalProduct, cellBuffer, cellBuffer),
+				   max(matrixCellProduct(matrix, risingDiagonalProduct, cellBuffer, cellBuffer),
+					 matrixCellProduct(matrix, rowPoduct, cellBuffer, 0) )));
 	}
 	
-	private int cellProduct(final int[][] matrix, BiFunction<Integer, Integer, Integer> calcProduct, int rowBuffer, int columnBuffer) {
+	private int matrixCellProduct(final int[][] matrix, BiFunction<Integer, Integer, Integer> calcProduct, int rowBuffer, int columnBuffer) {
 		return IntStream.range(0, matrix.length - 1 - rowBuffer)
 			.map(row -> getCellProduct(row, matrix, calcProduct))
 			.max()
@@ -58,22 +59,6 @@ public class P011_LargestProduct {
 			.map( col -> calcProduct.apply(row, col) )
 			.max()
 			.getAsInt();
-	}
-
-	static class EnumerateColumns {
-		public static int rowProduct(final int[][] matrix, BiFunction<Integer, Integer, Integer> calcProduct) {
-			return IntStream.range(0, matrix[0].length - 1)
-				.map(col -> getRowProd(col, matrix,calcProduct))
-				.max()
-				.getAsInt();
-		}
-
-		private static int getRowProd(int col, final int[][] matrix, BiFunction<Integer, Integer, Integer> calcProduct) {
-			return IntStream.range(0, matrix.length - 4)
-				.map( row -> calcProduct.apply(row, col) )
-				.max()
-				.getAsInt();
-		}
 	}
 
 	private static int[][] matrix = {
