@@ -51,12 +51,12 @@ public class P011_LargestProduct {
 	
 	private int matrixCellProduct(final int[][] matrix, BiFunction<Integer, Integer, Integer> calcProduct, int rowBuffer, int columnBuffer) {
 		return IntStream.range(0, matrix.length - 1 - rowBuffer)
-			.map(row -> getCellProduct(row, matrix, calcProduct))
+			.map(row -> calculateCellProduct(row, matrix, calcProduct))
 			.max()
 			.getAsInt();
 	}
 	
-	private int getCellProduct(int row, final int[][] matrix, BiFunction<Integer, Integer, Integer> calcProduct) {
+	private int calculateCellProduct(int row, final int[][] matrix, BiFunction<Integer, Integer, Integer> calcProduct) {
 		return IntStream.range(0, matrix[0].length - 4)
 			.map( col -> calcProduct.apply(row, col) )
 			.max()
