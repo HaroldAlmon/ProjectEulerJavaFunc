@@ -38,28 +38,27 @@ public class P011_LargestProduct {
 			   * matrix[row+2][col] 
 			   * matrix[row+3][col];
 	};
-	
-	public final int largestProduct() {
-		return max(FourCellProduct.cellProduct(matrix, columnProduct, 0, 4),
-				 max(FourCellProduct.cellProduct(matrix, fallingDiagonalProduct, 3, 3),
-				   max(FourCellProduct.cellProduct(matrix, risingDiagonalProduct, 3, 3),
-					 FourCellProduct.cellProduct(matrix, rowPoduct, 3, 0) )));
-	}
 
-	static class FourCellProduct {
-		public static int cellProduct(final int[][] matrix, BiFunction<Integer, Integer, Integer> calcProduct, int rowBuffer, int columnBuffer) {
-			return IntStream.range(0, matrix.length - rowBuffer - 1)
-				.map(row -> calculateProduct(row, matrix, calcProduct, columnBuffer))
-				.max()
-				.getAsInt();
-		}
-		
-		private static int calculateProduct(int row, final int[][] matrix, BiFunction<Integer, Integer, Integer> calcProduct, int columnBuffer) {
-			return IntStream.range(0, matrix[0].length - columnBuffer  - 1)
-				.map( col -> calcProduct.apply(row, col) )
-				.max()
-				.getAsInt();
-		}
+	public final int largestProduct() {
+		final int cellBuffer = 3;
+		return max(matrixCellProduct(matrix, columnProduct, 0, cellBuffer),
+				 max(matrixCellProduct(matrix, fallingDiagonalProduct, cellBuffer, cellBuffer),
+				   max(matrixCellProduct(matrix, risingDiagonalProduct, cellBuffer, cellBuffer),
+					 matrixCellProduct(matrix, rowPoduct, cellBuffer, 0) )));
+	}
+	
+	private int matrixCellProduct(final int[][] matrix, BiFunction<Integer, Integer, Integer> calcProduct, int rowBuffer, int columnBuffer) {
+		return IntStream.range(0, matrix.length - 1 - rowBuffer)
+			.map(row -> getCellProduct(row, matrix, calcProduct))
+			.max()
+			.getAsInt();
+	}
+	
+	private int getCellProduct(int row, final int[][] matrix, BiFunction<Integer, Integer, Integer> calcProduct) {
+		return IntStream.range(0, matrix[0].length - 4)
+			.map( col -> calcProduct.apply(row, col) )
+			.max()
+			.getAsInt();
 	}
 
 	private static int[][] matrix = {
