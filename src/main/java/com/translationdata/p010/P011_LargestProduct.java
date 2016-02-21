@@ -40,15 +40,15 @@ public class P011_LargestProduct {
 	};
 	
 	public final int largestProduct() {
-		return max(EnumerateRows.columnProduct(matrix, matrix.length - 1, columnProduct),
-				 max(EnumerateRows.columnProduct(matrix, matrix.length - 4, fallingDiagonalProduct),
-				   max(EnumerateRows.columnProduct(matrix, matrix.length - 4, risingDiagonalProduct),
+		return max(EnumerateRows.columnProduct(matrix, columnProduct, 0),
+				 max(EnumerateRows.columnProduct(matrix, fallingDiagonalProduct, 4),
+				   max(EnumerateRows.columnProduct(matrix, risingDiagonalProduct, 4),
 					 EnumerateColumns.rowProduct(matrix, rowPoduct) )));
 	}
 	
 	static class EnumerateRows {
-		public static int columnProduct(final int[][] matrix, int upperRange, BiFunction<Integer, Integer, Integer> calcProduct) {
-			return IntStream.range(0, upperRange)
+		public static int columnProduct(final int[][] matrix, BiFunction<Integer, Integer, Integer> calcProduct, int rowBuffer) {
+			return IntStream.range(0, matrix.length - 1 - rowBuffer)
 				.map(row -> getColProd(row, matrix, calcProduct))
 				.max()
 				.getAsInt();
