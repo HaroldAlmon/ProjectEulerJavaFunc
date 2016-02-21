@@ -56,59 +56,34 @@ public class P011_LargestProduct_SAM {
 	};
 	
 	public int largestProduct() {
-		return max(ColumnProduct.columnProduct(matrix, columnProduct), 
-				 max(ColumnProduct.columnProduct(matrix, fallingDiagonalProduct),
-				   max(ColumnProduct.columnProduct(matrix, risingDiagonalProduct),
-					 RowProduct.rowProduct(matrix, rowProduct) )));
+		return max(FourCellProduct.cellProduct(matrix, columnProduct, 0, 3), 
+				 max(FourCellProduct.cellProduct(matrix, fallingDiagonalProduct, 3, 3),
+				   max(FourCellProduct.cellProduct(matrix, risingDiagonalProduct, 3, 3),
+				     FourCellProduct.cellProduct(matrix, rowProduct, 3, 0) )));
 	}
 	
-	static class RowProduct {
-		public static int rowProduct(int[][] matrix, MatrixProduct matrixProduct) {
-			return rowProductImpl(0, 0, matrix, matrixProduct);
+	static class FourCellProduct {
+		public static int cellProduct(int[][] matrix, MatrixProduct cellProductLambda, int rowBuffer, int columnBuffer) {
+			return cellProductImpl(0, 0, matrix, cellProductLambda, rowBuffer, columnBuffer);
 		}
-
-		private static int rowProductImpl(int col, int product, int[][] matrix, MatrixProduct matrixProduct) {
-			if (col >=  matrix[0].length) 
+		
+		private static int cellProductImpl(int row, int product, int[][] matrix, MatrixProduct matrixProduct, int rowBuffer, int columnBuffer) {
+			if (row >= matrix.length - rowBuffer) 
 				return product;
-			return rowProductImpl( col + 1, max(product, getRowProd(col, matrix, matrixProduct)), matrix, matrixProduct);
-		}
-		
-
-		private static int getRowProd(int col, int[][] matrix, MatrixProduct matrixProduct) {
-			return getRowProdImpl(col, 0, matrix,  0, matrixProduct);
-		}
-		
-		private static int getRowProdImpl(int col, int row, int[][] matrix, int previousProduct, MatrixProduct matrixProduct) {
-			if (row > matrix.length - 4)
-				return previousProduct;
-			
-			final int product = matrixProduct.apply(matrix, row, col);
-			return getRowProdImpl(col, row + 1, matrix, max(previousProduct, product), matrixProduct);
-		}
-	}
-
-	static class ColumnProduct {
-		public static int columnProduct(int[][] matrix, MatrixProduct matrixProduct) {
-			return columnProductImpl(0, 0, matrix, matrixProduct, matrix.length - 4);
-		}
-		
-		private static int columnProductImpl(int row, int product, int[][] matrix, MatrixProduct matrixProduct, int upperLimit) {
-			if (row >= upperLimit) 
-				return product;
-			return columnProductImpl( row + 1, max(product, getColProd(row, matrix, matrixProduct)), matrix, matrixProduct, upperLimit);
+			return cellProductImpl(row + 1, max(product, caculateProduct(row, matrix, matrixProduct, columnBuffer)), matrix, matrixProduct, rowBuffer, columnBuffer);
 		}
 		
 		
-		private static int getColProd(int row, int[][] matrix, MatrixProduct matrixProduct) {
-			return getColProdImpl(row, 0, matrix,  0, matrixProduct);
+		private static int caculateProduct(int row, int[][] matrix, MatrixProduct matrixProduct, int columnBuffer) {
+			return cacluateProductImpl(row, 0, matrix,  0, matrixProduct, columnBuffer);
 		}
 		
-		private static int getColProdImpl(int row,  int col, int[][] matrix,int previousProduct, MatrixProduct matrixProduct) {
-			if (col > matrix[0].length - 4)
+		private static int cacluateProductImpl(int row,  int col, int[][] matrix,int previousProduct, MatrixProduct matrixProduct, int columnBuffer) {
+			if (col >= matrix[0].length - columnBuffer)
 				return previousProduct;
 			
 			final int product =  matrixProduct.apply(matrix, row, col);
-			return getColProdImpl(row, col + 1, matrix,  max(previousProduct, product), matrixProduct);
+			return cacluateProductImpl(row, col + 1, matrix,  max(previousProduct, product), matrixProduct, columnBuffer);
 		}	
 	}
 
