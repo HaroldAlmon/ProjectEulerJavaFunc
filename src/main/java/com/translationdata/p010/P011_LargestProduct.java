@@ -11,35 +11,31 @@ import JUnitTests.FastTest;
 
 @Category(FastTest.class)
 public class P011_LargestProduct {
-	// TODO: Generalize these calculations by apssing a cell buffer parameter.
+	// TODO: Generalize these calculations by passing a cell buffer parameter.
 	// This requires a TriFunction that does not exist in Java 8.
-	final BiFunction<Integer, Integer, Integer> columnProduct = (row, col) -> {
-		return   matrix[row][col] 
-			   * matrix[row][col + 1] 
-			   * matrix[row][col + 2] 
-			   * matrix[row][col + 3];
-	};
+	final BiFunction<Integer, Integer, Integer> columnProduct = 
+		(row, col) ->   matrix[row][col] 
+			          * matrix[row][col + 1] 
+			          * matrix[row][col + 2] 
+			          * matrix[row][col + 3];
 	
-	final BiFunction<Integer, Integer, Integer> fallingDiagonalProduct = (row, col) -> {
-		return   matrix[row]  [col] 
-			   * matrix[row+1][col+1] 
-			   * matrix[row+2][col+2] 
-			   * matrix[row+3][col+3];
-	};
+	final BiFunction<Integer, Integer, Integer> fallingDiagonalProduct = 
+		(row, col) ->   matrix[row]  [col] 
+					  * matrix[row+1][col+1] 
+					  * matrix[row+2][col+2] 
+					  * matrix[row+3][col+3];
 	
-	final BiFunction<Integer, Integer, Integer> risingDiagonalProduct = (row, col) -> {
-		return   matrix[row+3][col] 
-			   * matrix[row+2][col+1] 
-			   * matrix[row+1][col+2]
-			   * matrix[row]  [col+3];
-	};
+	final BiFunction<Integer, Integer, Integer> risingDiagonalProduct = 
+		(row, col) ->   matrix[row+3][col] 
+					  * matrix[row+2][col+1] 
+					  * matrix[row+1][col+2]
+					  * matrix[row]  [col+3];
 	
-	final BiFunction<Integer, Integer, Integer> rowPoduct = (row, col) -> {
-		return   matrix[row]  [col] 
-			   * matrix[row+1][col] 
-			   * matrix[row+2][col] 
-			   * matrix[row+3][col];
-	};
+	final BiFunction<Integer, Integer, Integer> rowPoduct = 
+		(row, col) ->   matrix[row]  [col] 
+					  * matrix[row+1][col] 
+					  * matrix[row+2][col] 
+					  * matrix[row+3][col];
 
 	public final int largestProduct() {
 		final int cellBuffer = 3;
@@ -89,7 +85,7 @@ public class P011_LargestProduct {
 	@Test(timeout = 1_000)
 	public void LargestProduct() {
 		int maximumProduct = largestProduct();
-		System.out.printf("largestProduct() = %d%n", maximumProduct);
+		System.out.printf("p011: largestProduct() = %d%n", maximumProduct);
 		assertEquals("Incorrect product", 70600674, maximumProduct);
 	}
 }
