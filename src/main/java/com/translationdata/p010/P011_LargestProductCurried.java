@@ -14,9 +14,7 @@ import JUnitTests.FastTest;
 
 @Category(FastTest.class)
 public class P011_LargestProductCurried {
-	// TODO: Generalize these calculations by passing a cell buffer parameter.
-	// This requires a TriFunction that does not exist in Java 8.
-	final Function<Integer, Function<Integer, Integer>> columnProduct = row -> col -> {
+	final Function<Integer, Function<Integer, Function<Integer, Integer>>> columnProduct2 = row -> col -> productLength -> {
 		
 		// Use a recursive function to calculate the product...
 		 return   matrix[row][col] 
@@ -46,25 +44,37 @@ public class P011_LargestProductCurried {
 
 	
 	public final int largestProduct() {
-		final int cellBuffer = 3;
-		return max(matrixCellProduct(matrix, columnProduct, 0, cellBuffer),
-				 max(matrixCellProduct(matrix, fallingDiagonalProduct, cellBuffer, cellBuffer),
-				   max(matrixCellProduct(matrix, risingDiagonalProduct, cellBuffer, cellBuffer),
-					 matrixCellProduct(matrix, rowPoduct, cellBuffer, 0) )));
+		final int productLength = 3;
+		return max(matrixCellProduct2(matrix, columnProduct2, 0, productLength),
+				 max(matrixCellProduct(matrix, fallingDiagonalProduct, productLength, productLength),
+				   max(matrixCellProduct(matrix, risingDiagonalProduct, productLength, productLength),
+					 matrixCellProduct(matrix, rowPoduct, productLength, 0) )));
 	}
 	
-	private int matrixCellProduct(final int[][] matrix, Function<Integer, Function<Integer, Integer>> calcProduct, int rowBuffer, int columnBuffer) {
-		return IntStream.range(0, matrix.length - 1 - rowBuffer)
+	private int matrixCellProduct(final int[][] matrix, Function<Integer, Function<Integer, Integer>> calcProduct, int rowLen, int columnLen) {
+		return IntStream.range(0, matrix.length - 1 - rowLen)
 			.map(row -> calculateCellProduct(row, matrix, calcProduct))
 			.max()
 			.getAsInt();
 	}
 	
-
+	private int matrixCellProduct2(final int[][] matrix, Function<Integer, Function<Integer, Function<Integer, Integer>>> calcProduct, int rowLeb, int productLen) {
+		return IntStream.range(0, matrix.length - 1 - rowLeb)
+			.map(row -> calculateCellProduct2(row, productLen, matrix, calcProduct))
+			.max()
+			.getAsInt();
+	}
 	
 	private int calculateCellProduct(int row, final int[][] matrix, Function<Integer, Function<Integer, Integer>> calcProduct) {
 		return IntStream.range(0, matrix[0].length - 4)
 			.map( col -> calcProduct.apply(row).apply(col) )
+			.max()
+			.getAsInt();
+	}
+	
+	private int calculateCellProduct2(int row, int productLen, final int[][] matrix, Function<Integer, Function<Integer, Function<Integer, Integer>>> calcProduct) {
+		return IntStream.range(0, matrix[0].length - 4)
+			.map( col -> calcProduct.apply(row).apply(col).apply(productLen) )
 			.max()
 			.getAsInt();
 	}
