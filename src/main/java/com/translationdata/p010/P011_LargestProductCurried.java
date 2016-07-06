@@ -32,37 +32,37 @@ public class P011_LargestProductCurried {
 						  * matrix[row+3][col+3];
 	
 
-	final Function<Integer, Function<Integer, Integer>> risingDiagonalProduct2 = 
+	final Function<Integer, Function<Integer, Integer>> risingDiagonalProduct = 
 			row -> col ->   matrix[row+3][col] 
 						  * matrix[row+2][col+1] 
 						  * matrix[row+1][col+2]
 						  * matrix[row]  [col+3];			
 
-	final Function<Integer, Function<Integer, Integer>>  rowPoduct2 = 
+	final Function<Integer, Function<Integer, Integer>>  rowPoduct = 
 			row -> col ->   matrix[row]  [col] 
 						  * matrix[row+1][col] 
 						  * matrix[row+2][col] 
 						  * matrix[row+3][col];
 
 	
-	public final int largestProduct2() {
+	public final int largestProduct() {
 		final int cellBuffer = 3;
-		return max(matrixCellProduct2(matrix, columnProduct, 0, cellBuffer),
-				 max(matrixCellProduct2(matrix, fallingDiagonalProduct, cellBuffer, cellBuffer),
-				   max(matrixCellProduct2(matrix, risingDiagonalProduct2, cellBuffer, cellBuffer),
-					 matrixCellProduct2(matrix, rowPoduct2, cellBuffer, 0) )));
+		return max(matrixCellProduct(matrix, columnProduct, 0, cellBuffer),
+				 max(matrixCellProduct(matrix, fallingDiagonalProduct, cellBuffer, cellBuffer),
+				   max(matrixCellProduct(matrix, risingDiagonalProduct, cellBuffer, cellBuffer),
+					 matrixCellProduct(matrix, rowPoduct, cellBuffer, 0) )));
 	}
 	
-	private int matrixCellProduct2(final int[][] matrix, Function<Integer, Function<Integer, Integer>> calcProduct, int rowBuffer, int columnBuffer) {
+	private int matrixCellProduct(final int[][] matrix, Function<Integer, Function<Integer, Integer>> calcProduct, int rowBuffer, int columnBuffer) {
 		return IntStream.range(0, matrix.length - 1 - rowBuffer)
-			.map(row -> calculateCellProduct2(row, matrix, calcProduct))
+			.map(row -> calculateCellProduct(row, matrix, calcProduct))
 			.max()
 			.getAsInt();
 	}
 	
 
 	
-	private int calculateCellProduct2(int row, final int[][] matrix, Function<Integer, Function<Integer, Integer>> calcProduct) {
+	private int calculateCellProduct(int row, final int[][] matrix, Function<Integer, Function<Integer, Integer>> calcProduct) {
 		return IntStream.range(0, matrix[0].length - 4)
 			.map( col -> calcProduct.apply(row).apply(col) )
 			.max()
@@ -94,7 +94,7 @@ public class P011_LargestProductCurried {
 	
 	@Test(timeout = 1_000)
 	public void LargestProduct() {
-		int maximumProduct = largestProduct2();
+		int maximumProduct = largestProduct();
 		System.out.printf("p011: largestProduct() = %d%n", maximumProduct);
 		assertEquals("Incorrect product", 70600674, maximumProduct);
 	}
