@@ -23,21 +23,21 @@ public class P011_LargestProductCurried {
 				* matrix[row][col + 3];
 	};
 	
-	final Function<Integer, Function<Integer, Integer>> fallingDiagonalProduct = 
-			row -> col ->   matrix[row]  [col] 
+	final Function<Integer, Function<Integer, Function<Integer, Integer>>> fallingDiagonalProduct = 
+			row -> col -> productLength ->  matrix[row]  [col] 
 						  * matrix[row+1][col+1] 
 						  * matrix[row+2][col+2] 
 						  * matrix[row+3][col+3];
 	
 
-	final Function<Integer, Function<Integer, Integer>> risingDiagonalProduct = 
-			row -> col ->   matrix[row+3][col] 
+	final Function<Integer, Function<Integer, Function<Integer, Integer>>> risingDiagonalProduct = 
+			row -> col -> productLength ->   matrix[row+3][col] 
 						  * matrix[row+2][col+1] 
 						  * matrix[row+1][col+2]
 						  * matrix[row]  [col+3];			
 
-	final Function<Integer, Function<Integer, Integer>>  rowPoduct = 
-			row -> col ->   matrix[row]  [col] 
+	final Function<Integer, Function<Integer, Function<Integer, Integer>>>  rowPoduct = 
+			row -> col -> productLength ->   matrix[row]  [col] 
 						  * matrix[row+1][col] 
 						  * matrix[row+2][col] 
 						  * matrix[row+3][col];
@@ -45,34 +45,20 @@ public class P011_LargestProductCurried {
 	
 	public final int largestProduct() {
 		final int productLength = 3;
-		return max(matrixCellProduct2(matrix, columnProduct2, 0, productLength),
+		return max(matrixCellProduct(matrix, columnProduct2, 0, productLength),
 				 max(matrixCellProduct(matrix, fallingDiagonalProduct, productLength, productLength),
 				   max(matrixCellProduct(matrix, risingDiagonalProduct, productLength, productLength),
 					 matrixCellProduct(matrix, rowPoduct, productLength, 0) )));
 	}
 	
-	private int matrixCellProduct(final int[][] matrix, Function<Integer, Function<Integer, Integer>> calcProduct, int rowLen, int columnLen) {
-		return IntStream.range(0, matrix.length - 1 - rowLen)
-			.map(row -> calculateCellProduct(row, matrix, calcProduct))
-			.max()
-			.getAsInt();
-	}
-	
-	private int matrixCellProduct2(final int[][] matrix, Function<Integer, Function<Integer, Function<Integer, Integer>>> calcProduct, int rowLeb, int productLen) {
+	private int matrixCellProduct(final int[][] matrix, Function<Integer, Function<Integer, Function<Integer, Integer>>> calcProduct, int rowLeb, int productLen) {
 		return IntStream.range(0, matrix.length - 1 - rowLeb)
-			.map(row -> calculateCellProduct2(row, productLen, matrix, calcProduct))
+			.map(row -> calculateCellProduct(row, productLen, matrix, calcProduct))
 			.max()
 			.getAsInt();
 	}
 	
-	private int calculateCellProduct(int row, final int[][] matrix, Function<Integer, Function<Integer, Integer>> calcProduct) {
-		return IntStream.range(0, matrix[0].length - 4)
-			.map( col -> calcProduct.apply(row).apply(col) )
-			.max()
-			.getAsInt();
-	}
-	
-	private int calculateCellProduct2(int row, int productLen, final int[][] matrix, Function<Integer, Function<Integer, Function<Integer, Integer>>> calcProduct) {
+	private int calculateCellProduct(int row, int productLen, final int[][] matrix, Function<Integer, Function<Integer, Function<Integer, Integer>>> calcProduct) {
 		return IntStream.range(0, matrix[0].length - 4)
 			.map( col -> calcProduct.apply(row).apply(col).apply(productLen) )
 			.max()
