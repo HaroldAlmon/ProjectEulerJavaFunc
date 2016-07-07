@@ -14,14 +14,14 @@ import JUnitTests.FastTest;
 
 @Category(FastTest.class)
 public class P011_LargestProductCurried {
-	final Function<Integer, Function<Integer, Function<Integer, Integer>>> columnProduct2 = row -> col -> productLength -> {
-		
-		// Use a recursive function to calculate the product...
-		 return   matrix[row][col] 
-				* matrix[row][col + 1] 
-				* matrix[row][col + 2] 
-				* matrix[row][col + 3];
-	};
+	final Function<Integer, Function<Integer, Function<Integer, Integer>>> columnProduct = 
+		row -> col -> productLength -> columnProductCalcImpl(row, col, productLength, 1);
+	
+	int columnProductCalcImpl(int row, int col, int productLength, int product) {
+		if (productLength < 0)
+			return product;
+		return columnProductCalcImpl(row, col, productLength - 1, product * matrix[row][col + productLength]);
+	}
 	
 	final Function<Integer, Function<Integer, Function<Integer, Integer>>> fallingDiagonalProduct = 
 			row -> col -> productLength ->  matrix[row]  [col] 
@@ -45,7 +45,7 @@ public class P011_LargestProductCurried {
 	
 	public final int largestProduct() {
 		final int productLength = 3;
-		return max(matrixCellProduct(matrix, columnProduct2, 0, productLength),
+		return max(matrixCellProduct(matrix, columnProduct, 0, productLength),
 				 max(matrixCellProduct(matrix, fallingDiagonalProduct, productLength, productLength),
 				   max(matrixCellProduct(matrix, risingDiagonalProduct, productLength, productLength),
 					 matrixCellProduct(matrix, rowPoduct, productLength, 0) )));
@@ -59,7 +59,7 @@ public class P011_LargestProductCurried {
 	}
 	
 	private int calculateCellProduct(int row, int productLen, final int[][] matrix, Function<Integer, Function<Integer, Function<Integer, Integer>>> calcProduct) {
-		return IntStream.range(0, matrix[0].length - 4)
+		return IntStream.range(0, matrix[0].length - (productLen + 1))
 			.map( col -> calcProduct.apply(row).apply(col).apply(productLen) )
 			.max()
 			.getAsInt();
@@ -88,7 +88,7 @@ public class P011_LargestProductCurried {
 		{1, 70, 54, 71, 83, 51, 54, 69, 16, 92, 33, 48, 61, 43, 52, 1, 89, 19, 67, 48} 
 	};
 	
-	@Test(timeout = 1_000)
+	@Test(timeout = 100_000)
 	public void LargestProduct() {
 		int maximumProduct = largestProduct();
 		System.out.printf("p011: largestProduct() = %d%n", maximumProduct);
