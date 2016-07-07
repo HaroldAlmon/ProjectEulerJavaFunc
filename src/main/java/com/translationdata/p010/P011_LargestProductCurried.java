@@ -12,35 +12,42 @@ import JUnitTests.FastTest;
 
 @Category(FastTest.class)
 public class P011_LargestProductCurried {
-	private final Function<Integer, 
-			Function<Integer, 
-				Function<Integer, Integer>>> columnProduct = 
-				row -> col -> productLength -> columnProductImpl(row, col, productLength, 1);
-	
-	private int columnProductImpl(int row, int col, int productLength, int product) {
-		if (productLength < 0)
-			return product;
-		return columnProductImpl(row, col, productLength - 1, product * matrix[row][col + productLength]);
-	}
 	
 	private final Function<Integer, 
-			Function<Integer, 
-				Function<Integer, Integer>>> fallingDiagonalProduct = 
-				row -> col -> productLength -> fallingDiagonalProductImpl(row, col, productLength, 1);
+					Function<Integer, 
+						Function<Integer, Integer>>> columnProduct = 
+							row -> col -> productLength -> columnProductImpl(row, col, productLength, 1);
 	
-	private int fallingDiagonalProductImpl(int row, int col, int productLength, int product) {
-		if (productLength < 0)
-			return product;
-		return fallingDiagonalProductImpl(row, col, productLength - 1, product * matrix[row  + productLength][col + productLength]);
-	}
-	
+		private int columnProductImpl(int row, int col, int delta, int product) {
+			if (delta < 0)
+				return product;
+			return columnProductImpl(row, col, delta - 1, product * matrix[row][col + delta]);
+		}
 
+	
+	private final Function<Integer, 
+					Function<Integer, 
+						Function<Integer, Integer>>> fallingDiagonalProduct = 
+						row -> col -> productLength -> fallingDiagonalProductImpl(row, col, productLength, 1);
+	
+		private int fallingDiagonalProductImpl(int row, int col, int delta, int product) {
+			if (delta < 0)
+				return product;
+			return fallingDiagonalProductImpl(row, col, delta - 1, product * matrix[row  + delta][col + delta]);
+		}
+	
+	
 	final Function<Integer, Function<Integer, Function<Integer, Integer>>> risingDiagonalProduct = 
-			row -> col -> productLength ->   matrix[row+3][col] 
-						  * matrix[row+2][col+1] 
-						  * matrix[row+1][col+2]
-						  * matrix[row]  [col+3];			
+			row -> col -> productLength -> risingDiagonalProductImpl(row, col, productLength, productLength, 1);	
 
+			private int risingDiagonalProductImpl(int row, int col, int delta, int productLength, int product) {
+				if (delta < 0)
+					return product;
+				return risingDiagonalProductImpl(row, col, delta - 1, productLength, product * matrix[row  + productLength - delta][col + delta]);
+			}
+
+
+					
 	final Function<Integer, Function<Integer, Function<Integer, Integer>>>  rowPoduct = 
 			row -> col -> productLength ->   matrix[row]  [col] 
 						  * matrix[row+1][col] 
@@ -56,9 +63,9 @@ public class P011_LargestProductCurried {
 					 matrixCellProduct(matrix, rowPoduct, productLength, 0) )));
 	}
 	
-	private int matrixCellProduct(final int[][] matrix, Function<Integer, Function<Integer, Function<Integer, Integer>>> calcProduct, int rowLeb, int productLen) {
-		return IntStream.range(0, matrix.length - 1 - rowLeb)
-			.map(row -> calculateCellProduct(row, productLen, matrix, calcProduct))
+	private int matrixCellProduct(final int[][] matrix, Function<Integer, Function<Integer, Function<Integer, Integer>>> calcProduct, int rowLen, int columnLen) {
+		return IntStream.range(0, matrix.length - 1 - rowLen)
+			.map(row -> calculateCellProduct(row, columnLen, matrix, calcProduct))
 			.max()
 			.getAsInt();
 	}
@@ -93,7 +100,7 @@ public class P011_LargestProductCurried {
 		{1, 70, 54, 71, 83, 51, 54, 69, 16, 92, 33, 48, 61, 43, 52, 1, 89, 19, 67, 48} 
 	};
 	
-	@Test(timeout = 100_000)
+	@Test(timeout = 1_000)
 	public void LargestProduct() {
 		int maximumProduct = largestProduct();
 		System.out.printf("p011: largestProduct() = %d%n", maximumProduct);
