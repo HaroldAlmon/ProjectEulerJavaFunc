@@ -3,9 +3,7 @@ package com.translationdata.p010;
 /** Strategy: Brute Force, High Order Functions */
 import static org.junit.Assert.assertEquals;
 
-import java.util.List;
 import java.util.function.Function;
-import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
@@ -14,20 +12,27 @@ import JUnitTests.FastTest;
 
 @Category(FastTest.class)
 public class P011_LargestProductCurried {
-	final Function<Integer, Function<Integer, Function<Integer, Integer>>> columnProduct = 
-		row -> col -> productLength -> columnProductCalcImpl(row, col, productLength, 1);
+	private final Function<Integer, 
+			Function<Integer, 
+				Function<Integer, Integer>>> columnProduct = 
+				row -> col -> productLength -> columnProductImpl(row, col, productLength, 1);
 	
-	int columnProductCalcImpl(int row, int col, int productLength, int product) {
+	private int columnProductImpl(int row, int col, int productLength, int product) {
 		if (productLength < 0)
 			return product;
-		return columnProductCalcImpl(row, col, productLength - 1, product * matrix[row][col + productLength]);
+		return columnProductImpl(row, col, productLength - 1, product * matrix[row][col + productLength]);
 	}
 	
-	final Function<Integer, Function<Integer, Function<Integer, Integer>>> fallingDiagonalProduct = 
-			row -> col -> productLength ->  matrix[row]  [col] 
-						  * matrix[row+1][col+1] 
-						  * matrix[row+2][col+2] 
-						  * matrix[row+3][col+3];
+	private final Function<Integer, 
+			Function<Integer, 
+				Function<Integer, Integer>>> fallingDiagonalProduct = 
+				row -> col -> productLength -> fallingDiagonalProductImpl(row, col, productLength, 1);
+	
+	private int fallingDiagonalProductImpl(int row, int col, int productLength, int product) {
+		if (productLength < 0)
+			return product;
+		return fallingDiagonalProductImpl(row, col, productLength - 1, product * matrix[row  + productLength][col + productLength]);
+	}
 	
 
 	final Function<Integer, Function<Integer, Function<Integer, Integer>>> risingDiagonalProduct = 
