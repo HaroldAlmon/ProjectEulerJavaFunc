@@ -62,7 +62,7 @@ public class P011_LargestProductCurried {
 			
 	
 	public final int largestProduct() {
-		final int productLength = 3;
+		final int productLength = 4 - 1;
 		return max(matrixCellProduct(matrix, columnProduct, 0, productLength),
 				 max(matrixCellProduct(matrix, fallingDiagonalProduct, productLength, productLength),
 				   max(matrixCellProduct(matrix, risingDiagonalProduct, productLength, productLength),
