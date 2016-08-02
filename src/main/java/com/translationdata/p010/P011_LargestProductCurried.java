@@ -12,17 +12,18 @@ import JUnitTests.FastTest;
 
 @Category(FastTest.class)
 public class P011_LargestProductCurried {
-	
+
+	// This defines a lambda expression not a function...
 	private final Function<Integer, 
                   Function<Integer, 
                   Function<Integer, Integer>>> columnProduct = 
                     row -> col -> productLength -> columnProductImpl(row, col, productLength, 1);
 	
-		private int columnProductImpl(int row, int col, int columnDelta, int product) {
-			if (columnDelta < 0)
-				return product;
-			return columnProductImpl(row, col, columnDelta - 1, product * matrix[row][col + columnDelta]);
-		}
+	private int columnProductImpl(int row, int col, int columnDelta, int product) {
+		if (columnDelta < 0)
+			return product;
+		return columnProductImpl(row, col, columnDelta - 1, product * matrix[row][col + columnDelta]);
+	}
 
 	
 	private final Function<Integer, 
@@ -30,11 +31,11 @@ public class P011_LargestProductCurried {
                   Function<Integer, Integer>>> fallingDiagonalProduct = 
                     row -> col -> productLength -> fallingDiagonalProductImpl(row, col, productLength, 1);
 	
-		private int fallingDiagonalProductImpl(int row, int col, int delta, int product) {
-			if (delta < 0)
-				return product;
-			return fallingDiagonalProductImpl(row, col, delta - 1, product * matrix[row  + delta][col + delta]);
-		}
+	private int fallingDiagonalProductImpl(int row, int col, int delta, int product) {
+		if (delta < 0)
+			return product;
+		return fallingDiagonalProductImpl(row, col, delta - 1, product * matrix[row  + delta][col + delta]);
+	}
 	
 	
 	private final Function<Integer, 
@@ -42,11 +43,11 @@ public class P011_LargestProductCurried {
                   Function<Integer, Integer>>> risingDiagonalProduct = 
                     row -> col -> productLength -> risingDiagonalProductImpl(row, col, productLength, 1, productLength);	
 
-			private int risingDiagonalProductImpl(int row, int col, int delta, int product, int productLength ) {
-				if (delta < 0)
-					return product;
-				return risingDiagonalProductImpl(row, col, delta - 1, product * matrix[row  + productLength - delta][col + delta], productLength);
-			}
+	private int risingDiagonalProductImpl(int row, int col, int delta, int product, int productLength ) {
+		if (delta < 0)
+			return product;
+		return risingDiagonalProductImpl(row, col, delta - 1, product * matrix[row  + productLength - delta][col + delta], productLength);
+	}
 
 					
 	private final Function<Integer, 
@@ -54,11 +55,11 @@ public class P011_LargestProductCurried {
                   Function<Integer, Integer>>>  rowPoduct = 
                     row -> col -> productLength -> rowProductImpl(row, col, productLength, 1);
 
-			private int rowProductImpl(int row, int col, int rowDelta, int product) {
-				if (rowDelta < 0)
-					return product;
-				return fallingDiagonalProductImpl(row, col, rowDelta - 1, product * matrix[row  + rowDelta][col]);
-			}
+	private int rowProductImpl(int row, int col, int rowDelta, int product) {
+		if (rowDelta < 0)
+			return product;
+		return fallingDiagonalProductImpl(row, col, rowDelta - 1, product * matrix[row  + rowDelta][col]);
+	}
 			
 	
 	public int largestProduct() {
