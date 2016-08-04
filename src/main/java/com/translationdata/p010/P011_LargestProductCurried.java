@@ -14,7 +14,7 @@ import static java.lang.Math.max;
 public class P011_LargestProductCurried {
 
 	private final IntFunction< 
-				  IntFunction< IntUnaryOperator> > columnProduct = 
+				  IntFunction< IntUnaryOperator> > columnProductLambda = 
       row -> col -> productLength -> columnProductImpl(row, col, productLength, 1);
 	
 	private int columnProductImpl(int row, int col, int columnDelta, int product) {
@@ -24,7 +24,7 @@ public class P011_LargestProductCurried {
 	}
 
 	private final IntFunction< 
-	  			  IntFunction< IntUnaryOperator> > fallingDiagonalProduct = 
+	  			  IntFunction< IntUnaryOperator> > fallingDiagonalProductLambda = 
 	  	row -> col -> productLength -> fallingDiagonalProductImpl(row, col, productLength, 1);
 	
 	private int fallingDiagonalProductImpl(int row, int col, int delta, int product) {
@@ -34,7 +34,7 @@ public class P011_LargestProductCurried {
 	}
 	
 	private final IntFunction< 
-	  			  IntFunction< IntUnaryOperator> > risingDiagonalProduct = 
+	  			  IntFunction< IntUnaryOperator> > risingDiagonalProductLambda = 
 	  	row -> col -> productLength -> risingDiagonalProductImpl(row, col, productLength, 1, productLength);	
 
 	private int risingDiagonalProductImpl(int row, int col, int delta, int product, int productLength ) {
@@ -44,7 +44,7 @@ public class P011_LargestProductCurried {
 	}
 					
 	private final IntFunction< 
-	  			  IntFunction< IntUnaryOperator> >  rowPoduct = 
+	  			  IntFunction< IntUnaryOperator> > rowPoductLambda = 
 	  	row -> col -> productLength -> rowProductImpl(row, col, productLength, 1);
 
 	private int rowProductImpl(int row, int col, int rowDelta, int product) {
@@ -56,10 +56,10 @@ public class P011_LargestProductCurried {
 	
 	public int largestProduct() {
 		final int productLength = 4 - 1;
-		return max(matrixCellProduct(matrix, columnProduct, 0, productLength),
-                 max(matrixCellProduct(matrix, fallingDiagonalProduct, productLength, productLength),
-                   max(matrixCellProduct(matrix, risingDiagonalProduct, productLength, productLength),
-                     matrixCellProduct(matrix, rowPoduct, productLength, 0) )));
+		return max(matrixCellProduct(matrix, columnProductLambda, 0, productLength),
+                 max(matrixCellProduct(matrix, fallingDiagonalProductLambda, productLength, productLength),
+                   max(matrixCellProduct(matrix, risingDiagonalProductLambda, productLength, productLength),
+                     matrixCellProduct(matrix, rowPoductLambda, productLength, 0) )));
 	}
 	
 	private int matrixCellProduct(final int[][] matrix, 
@@ -77,9 +77,9 @@ public class P011_LargestProductCurried {
                                      int productLen, 
                                      final int[][] matrix, 
                                      IntFunction< 
-                   	  			  	 IntFunction< IntUnaryOperator> > calcProduct) {
+                   	  			  	 IntFunction< IntUnaryOperator> > calcProductLambda) {
 		return IntStream.range(0, matrix[0].length - (productLen + 1))
-			.map( col -> calcProduct.apply(row).apply(col).applyAsInt(productLen) )
+			.map( col -> calcProductLambda.apply(row).apply(col).applyAsInt(productLen) )
 			.max()
 			.getAsInt();
 	}
