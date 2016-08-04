@@ -3,21 +3,19 @@ package com.translationdata.p010;
 /** Strategy: Brute Force, High Order Curried Functions */
 import static org.junit.Assert.assertEquals;
 
-import java.util.function.Function;
+import java.util.function.IntFunction;
+import java.util.function.IntUnaryOperator;
 import java.util.stream.IntStream;
 import org.junit.Test;
-import org.junit.experimental.categories.Category;
 import static java.lang.Math.max;
-import JUnitTests.FastTest;
+//import JUnitTests.FastTest;
 
-@Category(FastTest.class)
+//@Category(FastTest.class)
 public class P011_LargestProductCurried {
 
-	// This defines a lambda expression not a function...
-	private final Function<Integer, 
-                  Function<Integer, 
-                  Function<Integer, Integer>>> columnProduct = 
-                    row -> col -> productLength -> columnProductImpl(row, col, productLength, 1);
+	private final IntFunction< 
+				  IntFunction< IntUnaryOperator> > columnProduct = 
+      row -> col -> productLength -> columnProductImpl(row, col, productLength, 1);
 	
 	private int columnProductImpl(int row, int col, int columnDelta, int product) {
 		if (columnDelta < 0)
@@ -25,11 +23,9 @@ public class P011_LargestProductCurried {
 		return columnProductImpl(row, col, columnDelta - 1, product * matrix[row][col + columnDelta]);
 	}
 
-	
-	private final Function<Integer, 
-                  Function<Integer, 
-                  Function<Integer, Integer>>> fallingDiagonalProduct = 
-                    row -> col -> productLength -> fallingDiagonalProductImpl(row, col, productLength, 1);
+	private final IntFunction< 
+	  			  IntFunction< IntUnaryOperator> > fallingDiagonalProduct = 
+	  	row -> col -> productLength -> fallingDiagonalProductImpl(row, col, productLength, 1);
 	
 	private int fallingDiagonalProductImpl(int row, int col, int delta, int product) {
 		if (delta < 0)
@@ -37,23 +33,19 @@ public class P011_LargestProductCurried {
 		return fallingDiagonalProductImpl(row, col, delta - 1, product * matrix[row  + delta][col + delta]);
 	}
 	
-	
-	private final Function<Integer, 
-                  Function<Integer, 
-                  Function<Integer, Integer>>> risingDiagonalProduct = 
-                    row -> col -> productLength -> risingDiagonalProductImpl(row, col, productLength, 1, productLength);	
+	private final IntFunction< 
+	  			  IntFunction< IntUnaryOperator> > risingDiagonalProduct = 
+	  	row -> col -> productLength -> risingDiagonalProductImpl(row, col, productLength, 1, productLength);	
 
 	private int risingDiagonalProductImpl(int row, int col, int delta, int product, int productLength ) {
 		if (delta < 0)
 			return product;
 		return risingDiagonalProductImpl(row, col, delta - 1, product * matrix[row  + productLength - delta][col + delta], productLength);
 	}
-
 					
-	private final Function<Integer, 
-                  Function<Integer, 
-                  Function<Integer, Integer>>>  rowPoduct = 
-                    row -> col -> productLength -> rowProductImpl(row, col, productLength, 1);
+	private final IntFunction< 
+	  			  IntFunction< IntUnaryOperator> >  rowPoduct = 
+	  	row -> col -> productLength -> rowProductImpl(row, col, productLength, 1);
 
 	private int rowProductImpl(int row, int col, int rowDelta, int product) {
 		if (rowDelta < 0)
@@ -71,9 +63,8 @@ public class P011_LargestProductCurried {
 	}
 	
 	private int matrixCellProduct(final int[][] matrix, 
-                                  Function<Integer, 
-                                  Function<Integer, 
-                                  Function<Integer, Integer>>> calcProduct, 
+								  IntFunction< 
+								  IntFunction< IntUnaryOperator> > calcProduct, 
                                   int rowLen, 
                                   int columnLen) {
 		return IntStream.range(0, matrix.length - 1 - rowLen)
@@ -85,11 +76,10 @@ public class P011_LargestProductCurried {
 	private int calculateCellProduct(int row, 
                                      int productLen, 
                                      final int[][] matrix, 
-                                     Function<Integer, 
-                                     Function<Integer, 
-                                     Function<Integer, Integer>>> calcProduct) {
+                                     IntFunction< 
+                   	  			  	 IntFunction< IntUnaryOperator> > calcProduct) {
 		return IntStream.range(0, matrix[0].length - (productLen + 1))
-			.map( col -> calcProduct.apply(row).apply(col).apply(productLen) )
+			.map( col -> calcProduct.apply(row).apply(col).applyAsInt(productLen) )
 			.max()
 			.getAsInt();
 	}
