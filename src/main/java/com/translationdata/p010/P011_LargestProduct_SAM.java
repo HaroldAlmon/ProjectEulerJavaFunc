@@ -7,7 +7,7 @@ import org.junit.Test;
 import org.junit.experimental.categories.Category;
 import static java.lang.Math.max;
 
-import JUnitTests.FastTest;
+import com.translationdata.JUnitTests.FastTest;
 
 interface MatrixProduct {
 	public int apply(int[][] matrix, int row, int col);

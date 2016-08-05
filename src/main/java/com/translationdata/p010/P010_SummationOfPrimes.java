@@ -2,16 +2,15 @@ package com.translationdata.p010;
 /** Strategy: Sieve of SieveOfEratosthenes. */
 import static org.junit.Assert.assertEquals;
 
-import java.util.function.LongPredicate;
-import java.util.function.Predicate;
 import java.util.stream.LongStream;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 
-import JUnitTests.FastTest;
-import misc.SieveOfEratosthenes;
+//import com.trJUnitTests.FastTest;
+import com.translationdata.JUnitTests.FastTest;
+import com.translationdata.util.SieveOfEratosthenes;
 public class P010_SummationOfPrimes {
 	static int testNo = 1;
 	

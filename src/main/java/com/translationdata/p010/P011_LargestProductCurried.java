@@ -7,14 +7,16 @@ import java.util.function.IntFunction;
 import java.util.function.IntUnaryOperator;
 import java.util.stream.IntStream;
 import org.junit.Test;
-import static java.lang.Math.max;
-//import JUnitTests.FastTest;
+import org.junit.experimental.categories.Category;
 
-//@Category(FastTest.class)
+import static java.lang.Math.max;
+import com.translationdata.JUnitTests.FastTest;
+
+@Category(FastTest.class)
 public class P011_LargestProductCurried {
 
 	private final IntFunction< 
-				  IntFunction< IntUnaryOperator> > columnProductLambda = 
+				  IntFunction<IntUnaryOperator> > columnProductLambda = 
       row -> col -> productLength -> columnProductImpl(row, col, productLength, 1);
 	
 	private int columnProductImpl(int row, int col, int columnDelta, int product) {
@@ -22,9 +24,10 @@ public class P011_LargestProductCurried {
 			return product;
 		return columnProductImpl(row, col, columnDelta - 1, product * matrix[row][col + columnDelta]);
 	}
+	
 
 	private final IntFunction< 
-	  			  IntFunction< IntUnaryOperator> > fallingDiagonalProductLambda = 
+	  			  IntFunction<IntUnaryOperator> > fallingDiagonalProductLambda = 
 	  	row -> col -> productLength -> fallingDiagonalProductImpl(row, col, productLength, 1);
 	
 	private int fallingDiagonalProductImpl(int row, int col, int delta, int product) {
@@ -33,8 +36,9 @@ public class P011_LargestProductCurried {
 		return fallingDiagonalProductImpl(row, col, delta - 1, product * matrix[row  + delta][col + delta]);
 	}
 	
+	
 	private final IntFunction< 
-	  			  IntFunction< IntUnaryOperator> > risingDiagonalProductLambda = 
+	  			  IntFunction<IntUnaryOperator> > risingDiagonalProductLambda = 
 	  	row -> col -> productLength -> risingDiagonalProductImpl(row, col, productLength, 1, productLength);	
 
 	private int risingDiagonalProductImpl(int row, int col, int delta, int product, int productLength ) {
@@ -42,9 +46,10 @@ public class P011_LargestProductCurried {
 			return product;
 		return risingDiagonalProductImpl(row, col, delta - 1, product * matrix[row  + productLength - delta][col + delta], productLength);
 	}
+	
 					
 	private final IntFunction< 
-	  			  IntFunction< IntUnaryOperator> > rowPoductLambda = 
+	  			  IntFunction<IntUnaryOperator> > rowPoductLambda = 
 	  	row -> col -> productLength -> rowProductImpl(row, col, productLength, 1);
 
 	private int rowProductImpl(int row, int col, int rowDelta, int product) {
@@ -52,17 +57,9 @@ public class P011_LargestProductCurried {
 			return product;
 		return fallingDiagonalProductImpl(row, col, rowDelta - 1, product * matrix[row  + rowDelta][col]);
 	}
+	
 			
-	
-	public int largestProduct() {
-		final int productLength = 4 - 1;
-		return max(matrixCellProduct(matrix, columnProductLambda, 0, productLength),
-                 max(matrixCellProduct(matrix, fallingDiagonalProductLambda, productLength, productLength),
-                   max(matrixCellProduct(matrix, risingDiagonalProductLambda, productLength, productLength),
-                     matrixCellProduct(matrix, rowPoductLambda, productLength, 0) )));
-	}
-	
-	private int matrixCellProduct(final int[][] matrix, 
+	private int matrixCellProduct(int[][] matrix, 
 								  IntFunction< 
 								  IntFunction< IntUnaryOperator> > calcProduct, 
                                   int rowLen, 
@@ -75,7 +72,7 @@ public class P011_LargestProductCurried {
 	
 	private int calculateCellProduct(int row, 
                                      int productLen, 
-                                     final int[][] matrix, 
+                                     int[][] matrix, 
                                      IntFunction< 
                    	  			  	 IntFunction< IntUnaryOperator> > calcProductLambda) {
 		return IntStream.range(0, matrix[0].length - (productLen + 1))
@@ -83,10 +80,19 @@ public class P011_LargestProductCurried {
 			.max()
 			.getAsInt();
 	}
+	
+	public int largestProduct() {
+		final int CELLS_TO_MULTIPLY = 4;
+		final int productLength = CELLS_TO_MULTIPLY - 1;
+		return max(matrixCellProduct(matrix, columnProductLambda, 0, productLength),
+                 max(matrixCellProduct(matrix, fallingDiagonalProductLambda, productLength, productLength),
+                   max(matrixCellProduct(matrix, risingDiagonalProductLambda, productLength, productLength),
+                     matrixCellProduct(matrix, rowPoductLambda, productLength, 0) )));
+	}
 
 	private static int[][] matrix = {
-		{8, 2, 22, 97, 38, 15, 0, 40, 0, 75, 4, 5, 7, 78, 52, 12, 50, 77, 91, 8},
-		{49, 49, 99, 40, 17, 81, 18, 57, 60, 87, 17, 40, 98, 43, 69, 48, 4, 56, 62, 0},
+		{8,  2,  22, 97, 38, 15, 0,  40, 0,  75, 4,  5,  7,  78, 52, 12, 50, 77, 91, 8},
+		{49, 49, 99, 40, 17, 81, 18, 57, 60, 87, 17, 40, 98, 43, 69, 48,  4, 56, 62, 0},
 		{81, 49, 31, 73, 55, 79, 14, 29, 93, 71, 40, 67, 53, 88, 30, 3, 49, 13, 36, 65},
 		{52, 70, 95, 23, 4, 60, 11, 42, 69, 24, 68, 56, 1, 32, 56, 71, 37, 2, 36, 91},
 		{22, 31, 16, 71, 51, 67, 63, 89, 41, 92, 36, 54, 22, 40, 40, 28, 66, 33, 13, 80},
