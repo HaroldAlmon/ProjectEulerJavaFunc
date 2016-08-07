@@ -60,8 +60,8 @@ public class P011_LargestProductCurried {
 	
 			
 	private int matrixCellProduct(int[][] matrix, 
-								  IntFunction< 
-								  IntFunction< IntUnaryOperator> > calcProduct, 
+                                  IntFunction< 
+                                  IntFunction< IntUnaryOperator> > calcProduct, 
                                   int rowLen, 
                                   int columnLen) {
 		return IntStream.range(0, matrix.length - 1 - rowLen)
@@ -74,7 +74,7 @@ public class P011_LargestProductCurried {
                                      int productLen, 
                                      int[][] matrix, 
                                      IntFunction< 
-                   	  			  	 IntFunction< IntUnaryOperator> > calcProductLambda) {
+                                     IntFunction< IntUnaryOperator> > calcProductLambda) {
 		return IntStream.range(0, matrix[0].length - (productLen + 1))
 			.map( col -> calcProductLambda.apply(row).apply(col).applyAsInt(productLen) )
 			.max()
