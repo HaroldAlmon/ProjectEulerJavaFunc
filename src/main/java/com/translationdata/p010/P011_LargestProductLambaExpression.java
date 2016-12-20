@@ -16,7 +16,7 @@ interface CellProduct {
 }
 
 @Category(FastTest.class)
-public class P011_LargestProductHighOrder {
+public class P011_LargestProductLambaExpression {
 	// The following lambdas use tail recursion...
 	private final CellProduct columnProductLambda = (row, col, productLength) -> {
 		return columnProductImpl(row, col, productLength, 1);

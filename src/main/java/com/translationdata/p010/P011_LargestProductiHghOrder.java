@@ -13,7 +13,7 @@ import static java.lang.Math.max;
 import com.translationdata.JUnitTests.FastTest;
 
 @Category(FastTest.class)
-public class P011_LargestProductCurried {
+public class P011_LargestProductiHghOrder {
 
 	private final IntFunction< 
 				  IntFunction<IntUnaryOperator> > columnProductLambda = 
